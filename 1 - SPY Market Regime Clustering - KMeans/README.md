@@ -6,7 +6,7 @@ A machine learning project that identifies distinct market regimes in the SPY (S
 
 This project analyzes historical SPY price data to automatically detect and label different market regimes. By clustering market behavior based on returns and volatility features, it provides insights into market conditions that can be useful for trading strategies, risk management, and market analysis.
 
-## Features
+## Methodology
 
 1. **Data Download**: Automatically fetches SPY price data using yfinance with fallback to Stooq API
 2. **Data Preprocessing**: Converts the data into a pandas DataFrame and sorts the data by date
