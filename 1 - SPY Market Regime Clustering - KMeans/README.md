@@ -81,13 +81,6 @@ The script generates:
 - `vol_20d`: 20-day rolling standard deviation of returns
 - `vol_rel`: Relative volume (current volume / 20-day average volume)
 
-### Methodology
-
-1. **Data Preprocessing**: Features are standardized using `StandardScaler` before clustering
-2. **Clustering**: K-Means algorithm groups similar market conditions
-3. **Labeling**: Regimes are labeled based on volatility quantiles and return direction
-4. **Visualization**: Results are plotted to show regime transitions over time
-
 ## Requirements
 
 - Python 3.7+
