@@ -8,17 +8,19 @@ This project analyzes historical SPY price data to automatically detect and labe
 
 ## Features
 
-- **Data Download**: Automatically fetches SPY price data using yfinance with fallback to Stooq API
-- **Feature Engineering**: Calculates 1-day returns, 5-day and 20-day rolling volatility, and relative volume
-- **K-Means Clustering**: Identifies distinct market regimes using unsupervised learning
-- **Regime Labeling**: Automatically labels clusters as:
-  - **Calm**: Low volatility periods
-  - **Trending Up/Down**: Moderate volatility with directional movement
-  - **High Volatile Up/Down**: High volatility periods with positive/negative returns
-  - **Sideways**: Moderate volatility with minimal directional movement
-- **Visualizations**: Generates two plots:
-  - Price chart with regime-colored points
-  - Volatility scatter plot (5-day vs 20-day volatility)
+1. **Data Download**: Automatically fetches SPY price data using yfinance with fallback to Stooq API
+2. **Data Preprocessing**: Converts the data into a pandas DataFrame and sorts the data by date
+3. **Scaling**: Scales the data to have a mean of 0 and a standard deviation of 1
+4. **Feature Engineering**: Calculates 1-day returns, 5-day and 20-day rolling volatility, and relative volume
+5. **K-Means Clustering**: Identifies distinct market regimes using unsupervised learning
+6. **Regime Labeling**: Automatically labels clusters as:
+   - **Calm**: Low volatility periods
+   - **Trending Up/Down**: Moderate volatility with directional movement
+   - **High Volatile Up/Down**: High volatility periods with positive/negative returns
+   - **Sideways**: Moderate volatility with minimal directional movement
+7. **Visualizations**: Generates two plots:
+   - Price chart with regime-colored points
+   - Volatility scatter plot (5-day vs 20-day volatility)
 
 ## Installation
 
