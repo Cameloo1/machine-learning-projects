@@ -1,6 +1,6 @@
 # Next-Day Realized Volatility Forecasting
 
-A machine learning project that forecasts the **next-day realized volatility** of an asset (e.g., SPY) using historical price and volume data. This project demonstrates a strict time-series modeling discipline, avoiding common pitfalls like look-ahead bias, and compares ML models against a strong naive baseline.
+This machine learning project attempts to forecast the **next-day realized volatility** of an asset (e.g., SPY) using historical price and volume data. This project demonstrates a strict time-series modeling discipline, avoiding common pitfalls like look-ahead bias, and compares ML models against a strong naive baseline.
 
 ## Project Overview
 
