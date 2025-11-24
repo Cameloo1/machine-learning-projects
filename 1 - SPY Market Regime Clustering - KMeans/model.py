@@ -373,6 +373,43 @@ def print_cluster_summary(cluster_stats: pd.DataFrame):
     print(cluster_stats.to_string(float_format=lambda x: f"{x:0.5f}"))
 
 
+def save_regime_labels(df: pd.DataFrame, filename: str = "regime_labels.csv"):
+    """
+    Save a CSV for downstream ML containing Date, OHLCV, engineered features,
+    numeric regime and regime_label. Date is ISO-formatted, no index.
+    """
+    df_out = df.copy()
+
+    # Ensure Date column is datetime and formatted as ISO (YYYY-MM-DD)
+    if "Date" in df_out.columns and not pd.api.types.is_datetime64_any_dtype(df_out["Date"]):
+        df_out["Date"] = pd.to_datetime(df_out["Date"], errors="coerce")
+
+    # Select columns for the CSV; fall back if some original columns are missing
+    columns = [
+        "Date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume",
+        "ret_1d",
+        "vol_5d",
+        "vol_20d",
+        "vol_rel",
+        "regime",
+        "regime_label",
+    ]
+    existing_columns = [c for c in columns if c in df_out.columns]
+
+    # Format Date to ISO (no time)
+    if "Date" in existing_columns:
+        df_out["Date"] = df_out["Date"].dt.strftime("%Y-%m-%d")
+
+    # Write CSV
+    df_out[existing_columns].to_csv(filename, index=False)
+    print(f"Saved regime labels CSV to: {filename}")
+
+
 def build_and_run(
     ticker: str = "SPY",
     period: str = "2y",
@@ -406,6 +443,11 @@ def build_and_run(
 
     print("Plotting volatility scatter...")
     plot_vol_scatter(df_reg, title_suffix=title_suffix)
+
+    # Save CSV for downstream ML
+    csv_filename = "regime_labels.csv"
+    print(f"\nSaving regime labels to `{csv_filename}` for downstream ML...")
+    save_regime_labels(df_reg, filename=csv_filename)
 
     print("\nDone.")
     return df_reg, scaler, kmeans, cluster_stats
