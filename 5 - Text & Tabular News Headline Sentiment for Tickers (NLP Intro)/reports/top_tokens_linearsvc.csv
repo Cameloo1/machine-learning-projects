@@ -1,0 +1,46 @@
+model_name,class_label,feature,weight
+Linear SVC,Bearish,downgrade,0.8023591391869289
+Linear SVC,Bearish,nvidia stock,0.7409318627082929
+Linear SVC,Bearish,gates,0.6771871763072898
+Linear SVC,Bearish,slides,0.6697002520677326
+Linear SVC,Bearish,lower,0.6617341135184638
+Linear SVC,Bearish,tesla stock,0.6541054049717566
+Linear SVC,Bearish,cuts,0.6234700009089537
+Linear SVC,Bearish,losing,0.573994448135476
+Linear SVC,Bearish,tipranks,0.5681423783577182
+Linear SVC,Bearish,gives,0.5640812006401387
+Linear SVC,Bearish,sell,0.5587326695956779
+Linear SVC,Bearish,advisors,0.5450323097868471
+Linear SVC,Bearish,slips,0.5424383546066109
+Linear SVC,Bearish,tsla 12,0.5247835246653297
+Linear SVC,Bearish,12 earnings,0.5247835246653297
+Linear SVC,Bullish,buy,1.1674681368585216
+Linear SVC,Bullish,live,0.6331651486037889
+Linear SVC,Bullish,market,0.5874321625405369
+Linear SVC,Bullish,tsla stock,0.5818034343291729
+Linear SVC,Bullish,nvidia,0.5205677706741786
+Linear SVC,Bullish,raise,0.5070669385295119
+Linear SVC,Bullish,microsoft ai,0.4902705097613403
+Linear SVC,Bullish,nvidia 24,0.4607870646336264
+Linear SVC,Bullish,ai,0.4555003782728637
+Linear SVC,Bullish,stocks buy,0.4520554994525243
+Linear SVC,Bullish,live november,0.44188454549495326
+Linear SVC,Bullish,500 spy,0.44188454549495326
+Linear SVC,Bullish,market live,0.44188454549495326
+Linear SVC,Bullish,stock market,0.44120873140818145
+Linear SVC,Bullish,price buy,0.44081392951800585
+Linear SVC,Neutral,vs,1.1194050069702384
+Linear SVC,Neutral,2025,0.8353642602778237
+Linear SVC,Neutral,ai bubble,0.7586653677627936
+Linear SVC,Neutral,price prediction,0.7199205845627353
+Linear SVC,Neutral,bubble,0.6909941136043716
+Linear SVC,Neutral,million stock,0.6594496733154028
+Linear SVC,Neutral,prediction,0.5950629729760435
+Linear SVC,Neutral,valuation,0.5904026025702633
+Linear SVC,Neutral,buy sell,0.5858520278262686
+Linear SVC,Neutral,daily,0.5639488813501456
+Linear SVC,Neutral,million,0.5608233062312331
+Linear SVC,Neutral,stock split,0.5556203692249744
+Linear SVC,Neutral,split,0.5556203692249744
+Linear SVC,Neutral,split watch,0.5556203692249744
+Linear SVC,Neutral,watch microsoft,0.5556203692249744

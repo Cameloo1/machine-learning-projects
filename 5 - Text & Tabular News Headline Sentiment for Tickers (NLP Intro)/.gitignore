@@ -21,11 +21,6 @@ models/*.joblib
 data/raw_headlines.csv
 data/labeled_headlines.csv
 
-# Generated reports (can be regenerated)
-reports/figures/*.png
-reports/*.csv
-reports/*.md
-
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
@@ -43,4 +38,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.log
+
+
 

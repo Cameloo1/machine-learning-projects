@@ -1,0 +1,46 @@
+model_name,class_label,feature,weight
+Logistic Regression,Bearish,downgrade,0.4851799417829457
+Logistic Regression,Bearish,tipranks,0.4727773821061247
+Logistic Regression,Bearish,nvidia stock,0.45087237491207777
+Logistic Regression,Bearish,gates,0.4102471960738073
+Logistic Regression,Bearish,tesla stock,0.40818944625481246
+Logistic Regression,Bearish,slides,0.4065728833996257
+Logistic Regression,Bearish,lower,0.36360967188506893
+Logistic Regression,Bearish,shares,0.3628710315318574
+Logistic Regression,Bearish,cuts,0.34679130686791965
+Logistic Regression,Bearish,losing,0.3398871086201646
+Logistic Regression,Bearish,gives,0.3364098529595848
+Logistic Regression,Bearish,advisors,0.3314862421903919
+Logistic Regression,Bearish,slips,0.33060014520233255
+Logistic Regression,Bearish,data,0.32904868608393906
+Logistic Regression,Bearish,stock slides,0.3219435703952053
+Logistic Regression,Bullish,buy,0.7107538147400596
+Logistic Regression,Bullish,market,0.41357019789130095
+Logistic Regression,Bullish,live,0.41139750221951665
+Logistic Regression,Bullish,tsla stock,0.33150885560561677
+Logistic Regression,Bullish,stock market,0.32122682695748545
+Logistic Regression,Bullish,nvidia,0.3203306149164894
+Logistic Regression,Bullish,microsoft ai,0.3065203005382317
+Logistic Regression,Bullish,ticker_AAPL,0.3027025306635816
+Logistic Regression,Bullish,ai,0.29970462373559237
+Logistic Regression,Bullish,wall street,0.2994455906313728
+Logistic Regression,Bullish,market live,0.2977355084259954
+Logistic Regression,Bullish,live november,0.2977355084259954
+Logistic Regression,Bullish,500 spy,0.2977355084259954
+Logistic Regression,Bullish,wall,0.29575139040423226
+Logistic Regression,Bullish,street,0.2932427558154657
+Logistic Regression,Neutral,vs,0.69847548136247
+Logistic Regression,Neutral,2025,0.6209806551670771
+Logistic Regression,Neutral,price prediction,0.5177655997707225
+Logistic Regression,Neutral,prediction,0.4482541051121188
+Logistic Regression,Neutral,price,0.4458789147371839
+Logistic Regression,Neutral,ai bubble,0.43939789221950715
+Logistic Regression,Neutral,bubble,0.42231150021422936
+Logistic Regression,Neutral,daily,0.40460617567519647
+Logistic Regression,Neutral,stock price,0.390867442867318
+Logistic Regression,Neutral,million stock,0.36321851640488767
+Logistic Regression,Neutral,stock split,0.35269442635919396
+Logistic Regression,Neutral,watch microsoft,0.35269442635919396
+Logistic Regression,Neutral,split watch,0.35269442635919396
+Logistic Regression,Neutral,split,0.35269442635919396
+Logistic Regression,Neutral,buy sell,0.34702657640873663
