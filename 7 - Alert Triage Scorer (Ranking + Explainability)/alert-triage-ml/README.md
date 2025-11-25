@@ -92,7 +92,7 @@ python -m src.inference --mode csv --input data/raw/alerts_synthetic.csv --outpu
 ## Documentation
 
 ### Core Documentation
-- 📄 **[Model Card](reports/model_card.md)** — Human-readable summary covering problem context, data schema, modeling choices, performance, explainability approach, and limitations.
+- 📄 **[Model Card](reports/model_card.md)** — Readable summary covering problem context, data schema, modeling choices, performance, explainability approach, and limitations.
 
 ### Performance & Production
 - 📊 **[Production Readiness Analysis](reports/production_readiness_analysis.md)** — Comprehensive assessment of model production readiness, tuning recommendations (3-phase roadmap), implementation examples, and deployment checklist.
