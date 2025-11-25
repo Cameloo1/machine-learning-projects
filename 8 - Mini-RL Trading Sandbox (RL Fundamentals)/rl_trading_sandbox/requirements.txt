@@ -1,0 +1,8 @@
+numpy
+pandas
+gymnasium
+stable-baselines3
+matplotlib
+yfinance
+pandas-datareader
+

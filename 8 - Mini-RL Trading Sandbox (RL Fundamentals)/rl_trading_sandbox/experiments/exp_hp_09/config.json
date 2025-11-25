@@ -1,0 +1,53 @@
+{
+  "exp_name": "exp_hp_09",
+  "data_config": {
+    "csv_path": "data/spy_daily_2019_2024.csv",
+    "train_start": "2019-01-01",
+    "train_end": "2022-12-31",
+    "val_start": "2023-01-01",
+    "val_end": "2024-06-30",
+    "test_start": "2024-07-01",
+    "test_end": null
+  },
+  "feature_config": {
+    "feat_cols": [
+      "ret_log_1",
+      "price_norm",
+      "vol_rel",
+      "vol_20",
+      "vol_100",
+      "drawdown_pct",
+      "ma_fast",
+      "ma_slow",
+      "ma_200_slope",
+      "regime_fast",
+      "rsi_14"
+    ],
+    "window_size": 60,
+    "use_log_returns": true
+  },
+  "training_config": {
+    "seed": 811803,
+    "total_timesteps": 150000,
+    "batch_size": 32,
+    "gamma": 0.997,
+    "learning_rate": 0.0002,
+    "buffer_size": 200000,
+    "learning_starts": 1000,
+    "train_freq": 4,
+    "target_update_interval": 10000,
+    "exploration_fraction": 0.1,
+    "exploration_initial_eps": 1.0,
+    "exploration_final_eps": 0.02,
+    "max_grad_norm": 10.0,
+    "num_epochs": 10,
+    "eval_episodes": 10,
+    "patience": 4,
+    "policy_hidden_sizes": [
+      256,
+      256
+    ]
+  },
+  "trading_cost_bp": 1.0,
+  "max_episode_steps": 2000
+}

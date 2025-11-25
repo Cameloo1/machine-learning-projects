@@ -1,0 +1,19 @@
+{
+  "final_equity": 0.9806410273399683,
+  "total_return": -0.019358972660031726,
+  "max_drawdown": -0.16812341867109293,
+  "sharpe": -0.2207396007670511,
+  "n_trades": 66,
+  "win_rate": 0.48484848484848486,
+  "avg_win": 0.01044561910048021,
+  "avg_loss": -0.009904363613424779,
+  "profit_factor": 0.9926100557105406,
+  "avg_trade_duration": 3.242424242424242,
+  "n_episodes": 1,
+  "total_steps": 223,
+  "bh_final_equity": 1.1166687846825094,
+  "bh_total_return": 0.11666878468250941,
+  "bh_max_drawdown": -0.18755277437767126,
+  "bh_sharpe": 2.0182442054181324,
+  "excess_return": -0.13602775734254113
+}
