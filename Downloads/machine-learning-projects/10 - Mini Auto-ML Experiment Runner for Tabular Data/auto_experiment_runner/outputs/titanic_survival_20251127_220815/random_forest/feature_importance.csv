@@ -1,0 +1,29 @@
+feature,importance
+cat__Sex_female,0.24889128180585465
+cat__Sex_male,0.2166882029193587
+num__Age,0.09458283480896547
+num__Fare,0.07165908909627504
+num__Pclass,0.03160245672808487
+"cat__Name_Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg)",0.027777777777777776
+num__SibSp,0.02711135040280769
+cat__Ticket_PC 17599,0.026944245034697292
+"cat__Name_Allen, Mr. William Henry",0.021057669298875335
+cat__Ticket_373450,0.019229480737018426
+num__Parch,0.018046582116933878
+cat__Cabin_C85,0.017621440536013406
+cat__Embarked_C,0.017252931323283083
+cat__Ticket_349909,0.016393076493579007
+cat__Embarked_S,0.015368908032224618
+cat__Embarked_Q,0.0151790699529393
+cat__Ticket_A/5 21171,0.015019542155220547
+"cat__Name_Palsson, Master. Gosta Leonard",0.01346414612746271
+cat__Ticket_347742,0.01340033500837521
+cat__Ticket_330877,0.012239770279971288
+"cat__Name_Cumings, Mrs. John Bradley (Florence Briggs Thayer)",0.010704315226928291
+cat__Ticket_113803,0.010648480497726731
+cat__Ticket_STON/O2. 3101282,0.010066204036053284
+"cat__Name_Heikkinen, Miss. Laina",0.009097072664911863
+"cat__Name_Moran, Mr. James",0.007402089814150116
+"cat__Name_Futrelle, Mrs. Jacques Heath (Lily May Peel)",0.006834170854271358
+"cat__Name_Braund, Mr. Owen Harris",0.00426736858897663
+cat__Cabin_C123,0.0014501076812634608

@@ -1,0 +1,16 @@
+{
+  "epoch": 6,
+  "timesteps": 90000,
+  "val_final_equity": 1.0611969297119586,
+  "val_total_return": 0.06119692971195856,
+  "val_max_drawdown": -0.14876270120034463,
+  "val_sharpe": 0.3148317845311757,
+  "val_n_trades": 410,
+  "val_win_rate": 0.4902439024390244,
+  "val_avg_win": 0.013063838736733918,
+  "val_avg_loss": -0.01219556407359632,
+  "val_profit_factor": 1.0301932257830915,
+  "val_avg_trade_duration": 5.095121951219512,
+  "val_n_episodes": 10,
+  "val_total_steps": 2450
+}

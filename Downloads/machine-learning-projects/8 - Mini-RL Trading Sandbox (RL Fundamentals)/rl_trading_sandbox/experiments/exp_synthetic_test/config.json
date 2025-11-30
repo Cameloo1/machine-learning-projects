@@ -1,0 +1,23 @@
+{
+  "exp_name": "exp_synthetic_test",
+  "synthetic_data": true,
+  "n_bars": 5000,
+  "training_config": {
+    "seed": 42,
+    "total_timesteps": 150000,
+    "batch_size": 64,
+    "gamma": 0.995,
+    "learning_rate": 0.0001,
+    "buffer_size": 50000,
+    "learning_starts": 1000,
+    "train_freq": 4,
+    "target_update_interval": 5000,
+    "exploration_fraction": 0.2,
+    "exploration_initial_eps": 1.0,
+    "exploration_final_eps": 0.02,
+    "max_grad_norm": 10.0,
+    "num_epochs": 10,
+    "eval_episodes": 5,
+    "patience": 3
+  }
+}

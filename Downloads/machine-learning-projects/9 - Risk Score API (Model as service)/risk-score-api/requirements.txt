@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+scikit-learn
+joblib
+pandas
+jinja2
+python-multipart
+pytest
+

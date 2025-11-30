@@ -1,0 +1,16 @@
+[
+  {
+    "model": "logistic_regression",
+    "train_time_sec": 0.047301292419433594,
+    "f1_macro": 0.6703296703296704,
+    "accuracy": 0.7,
+    "roc_auc": 0.6623376623376622
+  },
+  {
+    "model": "random_forest",
+    "train_time_sec": 0.9626460075378418,
+    "f1_macro": 0.40476190476190477,
+    "accuracy": 0.52,
+    "roc_auc": 0.4740259740259741
+  }
+]

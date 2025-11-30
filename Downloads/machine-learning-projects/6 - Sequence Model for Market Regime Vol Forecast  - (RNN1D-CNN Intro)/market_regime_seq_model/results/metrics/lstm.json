@@ -1,0 +1,18 @@
+{
+    "accuracy": 0.85,
+    "macro_f1": 0.4594594594594595,
+    "class_metrics": {
+        "0": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 12
+        },
+        "1": {
+            "precision": 0.85,
+            "recall": 1.0,
+            "f1": 0.918918918918919,
+            "support": 68
+        }
+    }
+}

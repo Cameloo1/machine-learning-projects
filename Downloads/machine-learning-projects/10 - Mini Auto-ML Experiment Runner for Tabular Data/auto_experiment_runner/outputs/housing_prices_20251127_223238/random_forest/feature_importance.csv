@@ -1,0 +1,13 @@
+feature,importance
+num__OverallQual,0.5090749460682765
+num__GrLivArea,0.3577438084974119
+num__GarageArea,0.04323152186723193
+num__YearBuilt,0.03490367232375585
+num__LotArea,0.016369145003232118
+num__FullBath,0.008543931840115197
+num__BedroomAbvGr,0.008406439121616866
+cat__Neighborhood_Downtown,0.007170058308579096
+num__GarageCars,0.006571698291496125
+cat__Neighborhood_Suburb,0.003493397442164484
+cat__Neighborhood_Riverside,0.0030766918246969265
+cat__Neighborhood_Uptown,0.0014146894114228277

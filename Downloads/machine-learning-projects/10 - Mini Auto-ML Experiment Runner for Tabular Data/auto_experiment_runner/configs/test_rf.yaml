@@ -1,0 +1,41 @@
+dataset:
+  path: "examples/data/titanic.csv"
+  target_column: "Survived"
+  id_columns: ["PassengerId"]
+
+task:
+  type: "classification"
+  problem_name: "titanic_survival_rf"
+
+preprocessing:
+  impute_strategy_numeric: "median"
+  impute_strategy_categorical: "most_frequent"
+  scale_numeric: true
+  one_hot_encode_categorical: true
+  drop_low_variance_threshold: 0.0
+
+models:
+  - name: "random_forest"
+    enabled: true
+    params:
+      n_estimators: 50
+      max_depth: 5
+
+evaluation:
+  primary_metric: "accuracy"
+  additional_metrics:
+    - "f1_macro"
+  split:
+    type: "holdout"
+    test_size: 0.2
+    random_state: 42
+    stratify: true
+
+output:
+  base_dir: "outputs"
+  save_models: true
+  save_feature_importance: true
+  save_plots: true
+  save_classification_report: true
+  save_confusion_matrix: true
+  save_residual_plot: true
