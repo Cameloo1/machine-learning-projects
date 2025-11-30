@@ -1,0 +1,24 @@
+{
+  "features": {
+    "numeric": [
+      "source_ip_risk",
+      "user_risk_score",
+      "failed_login_count_24h",
+      "historical_false_positive_rate"
+    ],
+    "categorical": [
+      "alert_type",
+      "geo_impossible_travel",
+      "asset_criticality"
+    ]
+  },
+  "target": "priority",
+  "classes": [
+    "high",
+    "low",
+    "medium"
+  ],
+  "training_samples": 4688,
+  "validation_samples": 1172,
+  "description": "HistGradientBoostingClassifier for predicting alert priority (low/medium/high) based on SOC alert features"
+}

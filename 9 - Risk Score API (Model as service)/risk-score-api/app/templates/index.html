@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alert Risk Scoring Demo</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0b0c10;
+            color: #c5c6c7;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #45b3d6;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 28px;
+        }
+        
+        .card {
+            background: #1a1b26;
+            border: 1px solid #45b3d6;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #45b3d6;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            background: #0b0c10;
+            border: 1px solid #45b3d6;
+            color: #c5c6c7;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #66d9ef;
+            box-shadow: 0 0 5px rgba(102, 217, 239, 0.3);
+        }
+        
+        button {
+            background: #45b3d6;
+            color: #0b0c10;
+            border: 1px solid #45b3d6;
+            padding: 12px 30px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #66d9ef;
+            border-color: #66d9ef;
+        }
+        
+        button:active {
+            background: #2a8ba8;
+        }
+        
+        #result {
+            min-height: 50px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Alert Risk Scoring Demo</h1>
+        
+        <div class="card">
+            <form 
+                hx-post="/predict-form"
+                hx-target="#result"
+                hx-trigger="submit"
+                hx-swap="innerHTML"
+            >
+                <div class="form-group">
+                    <label for="alert_type">Alert Type</label>
+                    <select id="alert_type" name="alert_type" required>
+                        <option value="">Select alert type</option>
+                        <option value="brute_force">Brute Force</option>
+                        <option value="malware">Malware</option>
+                        <option value="suspicious_login">Suspicious Login</option>
+                        <option value="data_exfil">Data Exfiltration</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="source_ip_risk">Source IP Risk (0-1)</label>
+                        <input 
+                            type="number" 
+                            id="source_ip_risk" 
+                            name="source_ip_risk" 
+                            min="0" 
+                            max="1" 
+                            step="0.01" 
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="user_risk_score">User Risk Score (0-1)</label>
+                        <input 
+                            type="number" 
+                            id="user_risk_score" 
+                            name="user_risk_score" 
+                            min="0" 
+                            max="1" 
+                            step="0.01" 
+                            required
+                        >
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="failed_login_count_24h">Failed Login Count (24h)</label>
+                    <input 
+                        type="number" 
+                        id="failed_login_count_24h" 
+                        name="failed_login_count_24h" 
+                        min="0" 
+                        required
+                    >
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="geo_impossible_travel">Geo Impossible Travel</label>
+                        <select id="geo_impossible_travel" name="geo_impossible_travel" required>
+                            <option value="0">No (0)</option>
+                            <option value="1">Yes (1)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="asset_criticality">Asset Criticality</label>
+                        <select id="asset_criticality" name="asset_criticality" required>
+                            <option value="">Select criticality</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="historical_false_positive_rate">Historical False Positive Rate (0-1)</label>
+                    <input 
+                        type="number" 
+                        id="historical_false_positive_rate" 
+                        name="historical_false_positive_rate" 
+                        min="0" 
+                        max="1" 
+                        step="0.01" 
+                        required
+                    >
+                </div>
+                
+                <button type="submit">Score Alert</button>
+            </form>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+</body>
+</html>
