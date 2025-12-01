@@ -1,0 +1,9 @@
+experiment_name: "demo_experiment"
+data:
+  path: "data/dataset.csv"
+  target: "target_column"
+model:
+  type: "xgboost"
+  params:
+    n_estimators: 100
+    learning_rate: 0.1

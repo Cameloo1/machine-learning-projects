@@ -1,0 +1,46 @@
+dataset:
+  path: "examples/data/housing.csv"
+  target_column: "SalePrice"
+  id_columns: ["Id"]
+
+task:
+  type: "regression"
+  problem_name: "housing_prices"
+
+preprocessing:
+  impute_strategy_numeric: "median"
+  impute_strategy_categorical: "most_frequent"
+  scale_numeric: true
+  one_hot_encode_categorical: true
+  drop_low_variance_threshold: 0.0
+
+models:
+  - name: "linear_regression"
+    enabled: true
+    params: {}
+  - name: "random_forest"
+    enabled: true
+    params:
+      n_estimators: 400
+      max_depth: 12
+      min_samples_leaf: 2
+
+evaluation:
+  primary_metric: "r2"
+  additional_metrics:
+    - "rmse"
+    - "mae"
+  split:
+    type: "holdout"
+    test_size: 0.2
+    random_state: 42
+    stratify: false
+
+output:
+  base_dir: "outputs"
+  save_models: true
+  save_feature_importance: true
+  save_plots: true
+  save_classification_report: false
+  save_confusion_matrix: false
+  save_residual_plot: true
