@@ -66,8 +66,8 @@ python -m src.inference --mode csv --input data/raw/alerts_synthetic.csv --outpu
 - **XGBoost** tops the leaderboard with accuracy **0.90** and macro-F1 **0.88**, delivering balanced per-class F1 scores (Low 0.82, Medium 0.92, High 0.91). Its confusion matrix (see `artifacts/plots/confusion_matrix_xgb.png`) shows only ~6% of High alerts downgraded to Medium.
 - **LightGBM** remains competitive at accuracy **0.87**, macro-F1 **0.85**. It predicts Medium alerts well but confuses a few more Low/High cases with Medium (`artifacts/plots/confusion_matrix_lgbm.png`), matching the slightly lower recall reported in `artifacts/metrics/lgbm_metrics.json`.
 - **SHAP insights** (`artifacts/shap/global_summary.png`) confirm that trustworthy rules drive decisions: low `rule_historical_fpr` and the absence of `is_known_fp_source` push alerts toward High priority, while asset criticality, rule severity, kill-chain phase, detection confidence, and alert type one-hots provide the next tier of influence. The local bar plot highlights that individual alerts still draw on a mix of these features, even if the top two stand out for many cases.
-  - 📖 **Quick guide:** [`reports/shap_quick_reference.md`](reports/shap_quick_reference.md) — 3 simple rules for reading SHAP plots
-  - 📚 **Detailed breakdown:** [`reports/shap_plot_explanation.md`](reports/shap_plot_explanation.md) — Feature-by-feature interpretation and model logic analysis
+  - **Quick guide:** [`reports/shap_quick_reference.md`](reports/shap_quick_reference.md) — 3 simple rules for reading SHAP plots
+  - **Detailed breakdown:** [`reports/shap_plot_explanation.md`](reports/shap_plot_explanation.md) — Feature-by-feature interpretation and model logic analysis
 
 ## Reproducibility + configs
 - Global seeds live in `src/config.py`.
@@ -87,17 +87,17 @@ python -m src.inference --mode csv --input data/raw/alerts_synthetic.csv --outpu
 
 **Expected Outcome:** With Phase 1 optimizations, High priority recall → **92-93%** (from 88%).
 
-📋 **Full analysis:** [`reports/production_readiness_analysis.md`](reports/production_readiness_analysis.md) — Detailed tuning roadmap, implementation code examples, and production deployment checklist.
+**Full analysis:** [`reports/production_readiness_analysis.md`](reports/production_readiness_analysis.md) — Detailed tuning roadmap, implementation code examples, and production deployment checklist.
 
 ## Documentation
 
 ### Core Documentation
-- 📄 **[Model Card](reports/model_card.md)** — Readable summary covering problem context, data schema, modeling choices, performance, explainability approach, and limitations.
+- **[Model Card](reports/model_card.md)** — Readable summary covering problem context, data schema, modeling choices, performance, explainability approach, and limitations.
 
 ### Performance & Production
-- 📊 **[Production Readiness Analysis](reports/production_readiness_analysis.md)** — Comprehensive assessment of model production readiness, tuning recommendations (3-phase roadmap), implementation examples, and deployment checklist.
+- **[Production Readiness Analysis](reports/production_readiness_analysis.md)** — Comprehensive assessment of model production readiness, tuning recommendations (3-phase roadmap), implementation examples, and deployment checklist.
 
 ### Explainability & SHAP
-- 🎯 **[SHAP Quick Reference](reports/shap_quick_reference.md)** — 3 simple rules for reading SHAP plots, common patterns, and visual guide.
-- 📚 **[SHAP Plot Explanation](reports/shap_plot_explanation.md)** — Detailed feature-by-feature breakdown, interpretation guide, and model logic analysis.
+- **[SHAP Quick Reference](reports/shap_quick_reference.md)** — 3 simple rules for reading SHAP plots, common patterns, and visual guide.
+- **[SHAP Plot Explanation](reports/shap_plot_explanation.md)** — Detailed feature-by-feature breakdown, interpretation guide, and model logic analysis.
 
