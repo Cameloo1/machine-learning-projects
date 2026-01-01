@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Backtest Report</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 24px; color: #222; }
+      h1, h2 { margin-bottom: 8px; }
+      table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+      th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+      .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .card { border: 1px solid #ddd; padding: 12px; border-radius: 6px; }
+      pre { background: #f7f7f7; padding: 10px; border-radius: 6px; }
+      img { max-width: 100%; height: auto; }
+    </style>
+  </head>
+  <body>
+    <h1>Backtest Report</h1>
+
+    <div class="card">
+      <h2>Config Snapshot</h2>
+      <pre>{{ cfg_json }}</pre>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Data Diagnostics</h2>
+        <pre>{{ data_diag_json }}</pre>
+      </div>
+      <div class="card">
+        <h2>Universe Diagnostics</h2>
+        <pre>{{ universe_diag_json }}</pre>
+      </div>
+    </div>
+    {% if walkforward_json %}
+    <div class="card">
+      <h2>Walk-Forward Diagnostics</h2>
+      <pre>{{ walkforward_json }}</pre>
+    </div>
+    {% endif %}
+
+    <div class="grid">
+      <div class="card">
+        <h2>Equity Curve (Net vs Gross)</h2>
+        <img src="{{ equity_plot }}" alt="Equity Curve" />
+      </div>
+      <div class="card">
+        <h2>Drawdown (Net)</h2>
+        <img src="{{ drawdown_plot }}" alt="Drawdown" />
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Rolling Sharpe (Net)</h2>
+        <img src="{{ rolling_plot }}" alt="Rolling Sharpe" />
+      </div>
+      <div class="card">
+        <h2>Turnover & Costs</h2>
+        <img src="{{ turnover_plot }}" alt="Turnover and Costs" />
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Metrics</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in metrics_table %}
+          <tr>
+            <td>{{ row.metric }}</td>
+            <td>{{ row.value }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Diagnostics (Full)</h2>
+      <pre>{{ diagnostics_json }}</pre>
+    </div>
+  </body>
+</html>
