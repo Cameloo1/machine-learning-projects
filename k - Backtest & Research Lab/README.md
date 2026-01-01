@@ -29,14 +29,17 @@ Optional walk-forward:
 python -m backtest_lab.run --config configs/walkforward_sma_multi.yaml
 ```
 
+Strategies included: SMA trend, RSI mean reversion, vol-target overlay (SMA base), and
+ML-gated signals (CSV predictions + probability threshold).
+
 ## Artifacts
 Each run writes to `artifacts/<run_id>/`:
 - `config.json` (resolved config with absolute paths)
 - `run_metadata.json` (environment + config hash)
 - `diagnostics.json` (validation, universe, alignment, walk-forward)
 - `returns.csv` (ts,gross,net,exposure,turnover,cost,slippage,costs,...)
-- `weights.csv` (ts,symbol,weight)
-- `trades.csv` (ts,symbol,dw,abs_dw,cost,slippage,total_cost)
+- `weights.csv` (ts,symbol,weight[,window_id])
+- `trades.csv` (ts,symbol,dw,abs_dw,cost,slippage,total_cost[,window_id])
 - `metrics.csv`
 - `report.html` (+ `plots/` PNGs)
 
@@ -55,7 +58,5 @@ pytest -q -ra -W error::FutureWarning -W error::UserWarning -W error::Deprecatio
 - Turnover definition: `turnover[t] = sum_i |w_i[t] - w_i[t-1]|`.
 - Transaction costs: `cost_bps / 10000 * turnover[t]`.
 - Slippage:
-  - `bps`: `slippage_bps / 10000 * |dw|`
+  - `bps`: `slip_bps / 10000 * |dw|`
   - `vol_prop`: `slip_mult * |dw| * rolling_vol`
-- Cost sensitivity: rerun the same config with different `execution.cost_bps` values
-  (e.g., 0, 2, 5) for a three-point sweep.
