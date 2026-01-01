@@ -1,66 +1,70 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Tuple
 
 import numpy as np
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
+SCHEMA_VERSION = "constraints_v1"
+
 
 def apply_constraints(
     weights: pd.DataFrame,
-    cfg: Dict[str, Any],
     *,
-    diagnostics: Dict[str, Any] | None = None,
-) -> pd.DataFrame:
+    max_leverage: float,
+    max_weight_per_asset: float,
+) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     """
-    Apply per-asset caps and leverage caps to weights.
+    Enforce per-asset and leverage caps with deterministic renormalization.
+
+    - Per-asset cap is applied to absolute weight.
+    - Leverage cap uses sum(abs(weight)) per timestamp.
     """
     required = {"ts", "symbol", "weight"}
-    if not required.issubset(weights.columns):
-        missing = sorted(required - set(weights.columns))
-        raise ValueError(f"Missing columns in weights: {missing}")
-
-    max_leverage = float(cfg.get("max_leverage", 1.0))
-    max_weight = float(cfg.get("max_weight_per_asset", max_leverage))
+    missing = required - set(weights.columns)
+    if missing:
+        raise ValueError(f"apply_constraints missing columns: {sorted(missing)}")
 
     df = weights[["ts", "symbol", "weight"]].copy()
     df = df.sort_values(["symbol", "ts"], kind="mergesort").reset_index(drop=True)
 
-    if df.duplicated(subset=["ts", "symbol"]).any():
-        dup_count = int(df.duplicated(subset=["ts", "symbol"]).sum())
-        raise ValueError(f"Duplicate weights rows detected: {dup_count}")
+    n_nan_weights = int(df["weight"].isna().sum())
+    if n_nan_weights:
+        logger.info("Filling NaN weights with 0.0: %s", n_nan_weights)
+        df["weight"] = df["weight"].fillna(0.0)
 
-    before_clip = df["weight"].copy()
-    df["weight"] = df["weight"].clip(lower=-max_weight, upper=max_weight)
-    n_clipped = int((before_clip != df["weight"]).sum())
+    before = df["weight"].copy()
+    df["weight"] = df["weight"].clip(lower=-max_weight_per_asset, upper=max_weight_per_asset)
+    n_clipped = int((before != df["weight"]).sum())
 
-    grouped = df.groupby("ts", sort=False)["weight"]
-    leverage = grouped.apply(lambda s: s.abs().sum())
-    scale = np.where(leverage > max_leverage, max_leverage / leverage, 1.0)
-    scale_series = pd.Series(scale, index=leverage.index)
+    leverage = df.groupby("ts", sort=False)["weight"].apply(lambda s: float(np.abs(s).sum()))
+    leverage = leverage.reindex(df["ts"].unique())
 
-    df = df.merge(scale_series.rename("scale"), left_on="ts", right_index=True, how="left")
-    df["weight"] = df["weight"] * df["scale"]
-    df = df.drop(columns=["scale"])
+    scale_map = {}
+    n_scaled_ts = 0
+    for ts_val, lev in leverage.items():
+        if lev > max_leverage and lev > 0:
+            scale = max_leverage / lev
+            scale_map[ts_val] = scale
+            n_scaled_ts += 1
+        else:
+            scale_map[ts_val] = 1.0
 
-    n_scaled = int((leverage > max_leverage).sum())
-    if n_clipped:
-        logger.info("Clipped weights to per-asset cap: %s", n_clipped)
-    if n_scaled:
-        logger.info("Scaled weights to leverage cap: %s", n_scaled)
+    df["weight"] = df.apply(
+        lambda row: row["weight"] * scale_map.get(row["ts"], 1.0), axis=1
+    )
 
-    if diagnostics is not None:
-        diagnostics.update(
-            {
-                "constraints_max_leverage": max_leverage,
-                "constraints_max_weight_per_asset": max_weight,
-                "constraints_n_clipped": n_clipped,
-                "constraints_n_scaled_dates": n_scaled,
-                "constraints_leverage_max": float(leverage.max()) if len(leverage) else 0.0,
-            }
-        )
+    diagnostics: Dict[str, Any] = {
+        "schema_version": SCHEMA_VERSION,
+        "n_rows": int(len(df)),
+        "n_nan_weights": n_nan_weights,
+        "n_clipped": n_clipped,
+        "n_scaled_timestamps": n_scaled_ts,
+        "max_leverage": float(max_leverage),
+        "max_weight_per_asset": float(max_weight_per_asset),
+    }
 
-    return df
+    return df, diagnostics
