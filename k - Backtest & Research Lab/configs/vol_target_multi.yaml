@@ -1,0 +1,42 @@
+run_id: vol_target_multi
+output_dir: ../artifacts
+data:
+  mode: yfinance
+  cache_dir: ../data/raw/yahoo
+  start: 2016-01-01
+  end: 2024-01-01
+universe:
+  symbols:
+    - SPY
+    - QQQ
+    - IWM
+    - EFA
+    - EEM
+    - TLT
+    - GLD
+    - USO
+    - XLF
+    - XLK
+  min_history_days: 252
+  missing_data_policy: drop_symbol
+features:
+  sma_fast: 20
+  sma_slow: 50
+  rsi_window: 14
+  rsi_low: 30
+  rsi_high: 70
+strategy:
+  name: vol_target_trend
+  params:
+    target_vol: 0.15
+    vol_window: 20
+    min_vol: 0.02
+    max_scale: 3.0
+execution:
+  cost_bps: 2.0
+  slippage_model: vol_prop
+  slippage_params:
+    slip_mult: 0.2
+    vol_window: 20
+  max_leverage: 1.0
+  max_weight_per_asset: 0.25
