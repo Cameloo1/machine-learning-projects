@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-import logging
-from typing import Tuple
-
 import numpy as np
 import pandas as pd
-
-logger = logging.getLogger(__name__)
 
 
 def compute_sma(prices: pd.DataFrame, window: int, *, col: str = "close") -> pd.DataFrame:
