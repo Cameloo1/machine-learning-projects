@@ -1,0 +1,9 @@
+{
+  "config_path": "C:\\Users\\wasam\\OneDrive\\Desktop\\ml_projects\\k - Backtest & Research Lab\\configs\\vol_target_multi.yaml",
+  "config_sha256": "a6faab4c83c0a02078b368b1627b1f68a669f21a0ee6e8970e0081cc67874c5c",
+  "created_at_utc": "2026-01-01T16:25:46.691909+00:00",
+  "git_commit": "71e35c2713e7f1f4d724234f4a5374993d74891b",
+  "platform": "Windows-10-10.0.26100-SP0",
+  "python_version": "3.11.4",
+  "run_id": "vol_target_multi_sensitivity_high"
+}

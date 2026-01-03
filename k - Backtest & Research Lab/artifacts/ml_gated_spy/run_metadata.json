@@ -1,0 +1,9 @@
+{
+  "config_path": "C:\\Users\\wasam\\OneDrive\\Desktop\\ml_projects\\k - Backtest & Research Lab\\configs\\ml_gated_spy.yaml",
+  "config_sha256": "9f3927241891ed9e6292ed147b518fc0994a06c57cc466b9f5d2778ac7603c72",
+  "created_at_utc": "2026-01-01T16:25:07.840020+00:00",
+  "git_commit": "71e35c2713e7f1f4d724234f4a5374993d74891b",
+  "platform": "Windows-10-10.0.26100-SP0",
+  "python_version": "3.11.4",
+  "run_id": "ml_gated_spy"
+}

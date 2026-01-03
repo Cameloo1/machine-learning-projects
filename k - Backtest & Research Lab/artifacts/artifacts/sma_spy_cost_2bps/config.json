@@ -1,0 +1,38 @@
+{
+  "data": {
+    "cache_dir": "C:\\Users\\wasam\\OneDrive\\Desktop\\ml_projects\\k - Backtest & Research Lab\\data\\raw",
+    "end": null,
+    "mode": "csv",
+    "prices_path": "C:\\Users\\wasam\\OneDrive\\Desktop\\ml_projects\\k - Backtest & Research Lab\\data\\raw\\spy.csv",
+    "start": null
+  },
+  "execution": {
+    "cost_bps": 2.0,
+    "max_leverage": 1.0,
+    "max_weight_per_asset": 1.0,
+    "slippage_model": "none",
+    "slippage_params": {},
+    "strict_weight_alignment": false
+  },
+  "features": {
+    "rsi_high": 70.0,
+    "rsi_low": 30.0,
+    "rsi_window": 14,
+    "sma_fast": 20,
+    "sma_slow": 50
+  },
+  "output_dir": "C:\\Users\\wasam\\OneDrive\\Desktop\\ml_projects\\k - Backtest & Research Lab\\artifacts\\artifacts",
+  "run_id": "sma_spy_cost_2bps",
+  "strategy": {
+    "name": "sma_trend",
+    "params": {}
+  },
+  "universe": {
+    "min_history_days": 252,
+    "missing_data_policy": "drop_symbol",
+    "symbols": [
+      "SPY"
+    ]
+  },
+  "walkforward": null
+}

@@ -28,6 +28,7 @@ def select_universe(
     end_ts: Any,
     min_history: int,
     policy: str,
+    symbols: List[str] | None = None,
 ) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     df = prices.copy()
     if not pd.api.types.is_datetime64_any_dtype(df["ts"]):
@@ -41,6 +42,9 @@ def select_universe(
         raise ValueError("start_ts must be <= end_ts")
 
     window = df.loc[(df["ts"] >= start) & (df["ts"] <= end)].copy()
+    if symbols:
+        allowed = {str(sym) for sym in symbols}
+        window = window.loc[window["symbol"].isin(allowed)].copy()
     window = window.sort_values(["symbol", "ts"]).reset_index(drop=True)
 
     coverage_by_symbol: List[Dict[str, Any]] = []
@@ -117,6 +121,7 @@ def select_universe(
         "end_ts": end.isoformat(),
         "min_history": int(min_history),
         "missing_data_policy": str(policy),
+        "requested_symbols": sorted({str(sym) for sym in symbols}) if symbols else None,
         "n_symbols_in": int(window["symbol"].nunique()),
         "n_symbols_out": int(len(final_assets)),
         "n_rows_in_window": int(len(window)),

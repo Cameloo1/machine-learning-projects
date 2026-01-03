@@ -1,0 +1,28 @@
+{
+  "data": {
+    "format": "long",
+    "path": "data/raw/spy.csv"
+  },
+  "execution": {
+    "cost_bps": 2.0,
+    "max_leverage": 1.0,
+    "max_weight_per_asset": 1.0
+  },
+  "features": {
+    "sma_fast": 20,
+    "sma_slow": 50
+  },
+  "output_dir": "artifacts",
+  "report": {
+    "enabled": true
+  },
+  "run_id": "20251231_220903_sma_trend",
+  "strategy": {
+    "name": "sma_trend"
+  },
+  "universe": {
+    "symbols": [
+      "SPY"
+    ]
+  }
+}

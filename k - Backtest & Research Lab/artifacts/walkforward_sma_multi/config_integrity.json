@@ -1,0 +1,7 @@
+{
+  "min_history_days": 252,
+  "min_history_ok": true,
+  "required_history_days": 50,
+  "walkforward_enabled": true,
+  "walkforward_step_le_test_ok": true
+}

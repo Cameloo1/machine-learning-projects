@@ -1,0 +1,32 @@
+run_id: ml_gated_spy
+output_dir: ../artifacts
+data:
+  mode: csv
+  prices_path: ../data/processed/prices_long.csv
+  cache_dir: ../data/raw
+universe:
+  symbols:
+    - SPY
+  min_history_days: 252
+  missing_data_policy: drop_symbol
+features:
+  sma_fast: 20
+  sma_slow: 50
+  rsi_window: 14
+  rsi_low: 30
+  rsi_high: 70
+strategy:
+  name: ml_gated
+  params:
+    preds_path: ../data/processed/preds_spy_sample.csv
+    pred_col: pred
+    threshold: 0.55
+    base_strategy:
+      name: sma_trend
+      params: {}
+execution:
+  cost_bps: 2.0
+  slippage_model: none
+  slippage_params: {}
+  max_leverage: 1.0
+  max_weight_per_asset: 1.0

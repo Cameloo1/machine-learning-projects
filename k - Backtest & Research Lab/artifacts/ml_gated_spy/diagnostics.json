@@ -1,0 +1,271 @@
+{
+  "alignment": {
+    "alignment_version": "weights_t_returns_tplus1",
+    "constraints": {
+      "constraints_leverage_max": 1.0,
+      "constraints_max_leverage": 1.0,
+      "constraints_max_weight_per_asset": 1.0,
+      "constraints_n_clipped": 0.0,
+      "constraints_n_scaled_dates": 0.0,
+      "n_clipped": 0.0,
+      "n_scaled_timestamps": 0.0
+    },
+    "costs": {
+      "cost_bps": 2.0,
+      "slippage_missing_vol_rows": 0,
+      "slippage_model": "none",
+      "slippage_params": {}
+    },
+    "n_extra_weight_keys": 0,
+    "n_filled_weight_rows": 0,
+    "n_gap_returns": 1,
+    "n_missing_returns": 1,
+    "n_missing_weight_keys": 0,
+    "n_price_rows": 2012,
+    "n_unique_price_keys": 2012,
+    "n_unique_weight_keys": 2012,
+    "n_weight_rows": 2012,
+    "strict_weight_alignment": false
+  },
+  "benchmark": {
+    "missing_on_ts": 0,
+    "rows": 2012,
+    "symbol": "SPY"
+  },
+  "universe": {
+    "asset_hash": "6493341e6b5636b2080fa9a1961f4fd3f1736f4486672060d2ef0e5d59b0f946",
+    "coverage_by_symbol": [
+      {
+        "drop_reason": null,
+        "eligible": true,
+        "min_history_ok": true,
+        "n_complete_rows": 2012,
+        "n_missing_rows": 0,
+        "n_rows": 2012,
+        "n_rows_after_policy": 2012,
+        "symbol": "SPY"
+      }
+    ],
+    "dropped_symbols": [],
+    "end_ts": "2023-12-29T00:00:00",
+    "final_assets": [
+      "SPY"
+    ],
+    "min_history": 252,
+    "missing_data_policy": "drop_symbol",
+    "n_rows_after_policy": 2012,
+    "n_rows_in_window": 2012,
+    "n_symbols_in": 1,
+    "n_symbols_out": 1,
+    "requested_symbols": [
+      "SPY"
+    ],
+    "rows_dropped_missing": 0,
+    "start_ts": "2016-01-04T00:00:00"
+  },
+  "validate": {
+    "data_integrity_report": {
+      "changed_value_rows": {
+        "close": 0,
+        "high": 0,
+        "low": 0,
+        "open": 0,
+        "volume": 0
+      },
+      "duplicate_count_before": 0,
+      "duplicate_extra_rows": 0,
+      "integrity_version": "data_integrity_v1",
+      "row_count_after": 20120,
+      "row_count_before": 20120,
+      "summary_after": {
+        "close": {
+          "max": 477.7099914550781,
+          "mean": 126.13481342512856,
+          "min": 15.970754623413086
+        },
+        "high": {
+          "max": 479.9800109863281,
+          "mean": 126.92879430181226,
+          "min": 16.149471282958984
+        },
+        "low": {
+          "max": 476.260009765625,
+          "mean": 125.25751367212527,
+          "min": 15.865150451660156
+        },
+        "open": {
+          "max": 479.2200012207031,
+          "mean": 126.12367705948073,
+          "min": 16.035743713378906
+        },
+        "volume": {
+          "max": 392220700.0,
+          "mean": 34348446.95795228,
+          "min": 1200.0
+        }
+      },
+      "summary_before": {
+        "close": {
+          "max": 477.7099914550781,
+          "mean": 126.13481342512856,
+          "min": 15.970754623413086
+        },
+        "high": {
+          "max": 479.9800109863281,
+          "mean": 126.92879430181226,
+          "min": 16.149471282958984
+        },
+        "low": {
+          "max": 476.260009765625,
+          "mean": 125.25751367212527,
+          "min": 15.865150451660156
+        },
+        "open": {
+          "max": 479.2200012207031,
+          "mean": 126.12367705948073,
+          "min": 16.035743713378906
+        },
+        "volume": {
+          "max": 392220700.0,
+          "mean": 34348446.95795228,
+          "min": 1200.0
+        }
+      }
+    },
+    "dup_key_samples": [],
+    "duplicate_diagnostics": {
+      "duplicate_conflict_count": 0,
+      "duplicate_conflict_samples": [],
+      "duplicate_count_before": 0,
+      "duplicate_extra_rows": 0,
+      "duplicate_keys": [],
+      "duplicates_by_symbol": {},
+      "duplicates_by_ts": {}
+    },
+    "duplicate_policy": "keep_first_after_sort",
+    "missingness_by_symbol": [
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "EEM"
+      },
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "EFA"
+      },
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "GLD"
+      },
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "IWM"
+      },
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "QQQ"
+      },
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "SPY"
+      },
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "TLT"
+      },
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "USO"
+      },
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "XLF"
+      },
+      {
+        "n_rows": 2012,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "XLK"
+      }
+    ],
+    "missingness_global": {
+      "close": 0,
+      "high": 0,
+      "low": 0,
+      "open": 0,
+      "symbol": 0,
+      "ts": 0,
+      "volume": 0
+    },
+    "n_bad_ts": 0,
+    "n_dup_keys": 0,
+    "n_dup_rows_removed": 0,
+    "n_empty_symbol": 0,
+    "n_null_close": 0,
+    "n_rows_dropped_null_close": 0,
+    "n_rows_in": 20120,
+    "n_rows_out": 20120,
+    "n_symbols_in": 10,
+    "n_symbols_out": 10,
+    "schema_version": "prices_validator_v1",
+    "ts_max": "2023-12-29T00:00:00",
+    "ts_min": "2016-01-04T00:00:00"
+  },
+  "warmup": {
+    "ml_gate_base_strategy": "sma_trend",
+    "ml_gate_missing_preds": 1760,
+    "ml_gate_threshold": 0.55,
+    "warmup_nan_rows": 49,
+    "warmup_nan_rows_by_symbol": {
+      "SPY": 49
+    },
+    "warmup_policy": "zero_weight"
+  }
+}

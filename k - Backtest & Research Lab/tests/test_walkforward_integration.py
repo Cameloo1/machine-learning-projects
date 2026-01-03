@@ -65,9 +65,12 @@ def test_walkforward_no_leakage_and_universe_lock(tmp_path: Path) -> None:
     wf = diagnostics["walkforward"]
 
     assert wf["window_count"] >= 1
+    assert wf["window_universe_diagnostics"]
     for window in wf["windows"]:
         win = window["window"]
         universe = window["universe"]
         assert win["train_end"] < win["test_start"]
         assert universe["final_assets"]
+        assert universe["asset_hash"] == _hash_assets(sorted(universe["final_assets"]))
+    for universe in wf["window_universe_diagnostics"]:
         assert universe["asset_hash"] == _hash_assets(sorted(universe["final_assets"]))

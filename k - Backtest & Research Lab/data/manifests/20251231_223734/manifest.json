@@ -1,0 +1,39 @@
+{
+  "run_id": "20251231_223734",
+  "timestamp": "2025-12-31T22:37:34.372956",
+  "python_version": "3.11.4",
+  "tickers": [
+    "SPY"
+  ],
+  "start": "2022-01-01",
+  "end": "2023-12-31",
+  "results": {
+    "SPY": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "SPY",
+      "raw_path": "data\\raw\\yahoo\\SPY.csv",
+      "actions_path": "data\\raw\\yahoo\\SPY_actions.csv",
+      "cached": false,
+      "row_count": 501,
+      "date_coverage": {
+        "start": "2022-01-03",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.03653846153846154,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "fe6e70de9d641a1f18b0f00d40e5097eb5af44fa64283f9c05ade16dc7861b9a"
+    }
+  }
+}

@@ -39,7 +39,7 @@ def test_bad_timestamps_raise() -> None:
     assert "1" in message
 
 
-def test_duplicates_removed_deterministically_keep_first_after_sort() -> None:
+def test_duplicates_with_conflicts_raise() -> None:
     df = pd.DataFrame(
         {
             "ts": ["2020-01-02", "2020-01-02", "2020-01-01", "2020-01-01"],
@@ -53,23 +53,8 @@ def test_duplicates_removed_deterministically_keep_first_after_sort() -> None:
     )
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
-    out, diagnostics = validate_prices(df)
-
-    expected = (
-        df.assign(ts=pd.to_datetime(df["ts"]))
-        .sort_values(["symbol", "ts"], kind="mergesort")
-        .drop_duplicates(subset=["ts", "symbol"], keep="first")
-        .reset_index(drop=True)
-    )
-
-    assert len(out) == len(expected)
-    assert not out.duplicated(subset=["ts", "symbol"]).any()
-    assert out.loc[out["ts"] == pd.Timestamp("2020-01-01"), "close"].iloc[0] == expected.loc[
-        expected["ts"] == pd.Timestamp("2020-01-01"), "close"
-    ].iloc[0]
-    assert diagnostics["n_dup_rows_removed"] == 2
-    assert diagnostics["n_dup_keys"] == 2
-    assert any("2020-01-01" in sample for sample in diagnostics["dup_key_samples"])
+    with pytest.raises(ValueError):
+        validate_prices(df)
 
 
 def test_output_unique_and_sorted() -> None:

@@ -2,7 +2,7 @@ run_id: sma_spy
 output_dir: ../artifacts
 data:
   mode: csv
-  prices_path: ../data/raw/spy.csv
+  prices_path: ../data/processed/prices_long.csv
   cache_dir: ../data/raw
 universe:
   symbols:

@@ -22,6 +22,16 @@
       <pre>{{ cfg_json }}</pre>
     </div>
 
+    <div class="card">
+      <h2>Timing & Alignment</h2>
+      <p>
+        Weights are decided at end of day <strong>decision_ts</strong> (t).
+        Returns at <strong>ts</strong> are realized on the next trading day (t+1).
+        Portfolio return at ts uses weights from decision_ts:
+        <code>rp[ts] = Σ_i w_i[decision_ts] * r_i[ts] − costs[ts]</code>.
+      </p>
+    </div>
+
     <div class="grid">
       <div class="card">
         <h2>Data Diagnostics</h2>
@@ -32,11 +42,54 @@
         <pre>{{ universe_diag_json }}</pre>
       </div>
     </div>
+    <div class="grid">
+      <div class="card">
+        <h2>Alignment Diagnostics</h2>
+        <pre>{{ alignment_diag_json }}</pre>
+      </div>
+      <div class="card">
+        <h2>Warmup Diagnostics</h2>
+        <pre>{{ warmup_diag_json }}</pre>
+      </div>
+    </div>
     {% if walkforward_json %}
     <div class="card">
       <h2>Walk-Forward Diagnostics</h2>
       <pre>{{ walkforward_json }}</pre>
     </div>
+    {% if window_summary %}
+    <div class="card">
+      <h2>Walk-Forward Window Summary</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Window</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Periods</th>
+            <th>Total Return</th>
+            <th>CAGR</th>
+            <th>Sharpe</th>
+            <th>Max Drawdown</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in window_summary %}
+          <tr>
+            <td>{{ row.window_id }}</td>
+            <td>{{ row.start_ts }}</td>
+            <td>{{ row.end_ts }}</td>
+            <td>{{ row.n_periods }}</td>
+            <td>{{ row.total_return }}</td>
+            <td>{{ row.cagr }}</td>
+            <td>{{ row.sharpe }}</td>
+            <td>{{ row.max_drawdown }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
     {% endif %}
 
     <div class="grid">
@@ -58,6 +111,29 @@
       <div class="card">
         <h2>Turnover & Costs</h2>
         <img src="{{ turnover_plot }}" alt="Turnover and Costs" />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h2>Gross Exposure</h2>
+        <img src="{{ exposure_plot }}" alt="Exposure" />
+      </div>
+      <div class="card">
+        <h2>Cost Totals</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Total Turnover</td><td>{{ cost_totals.total_turnover }}</td></tr>
+            <tr><td>Total Costs</td><td>{{ cost_totals.total_costs }}</td></tr>
+            <tr><td>Total Slippage</td><td>{{ cost_totals.total_slippage }}</td></tr>
+            <tr><td>Total Txn Cost</td><td>{{ cost_totals.total_txn_cost }}</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 

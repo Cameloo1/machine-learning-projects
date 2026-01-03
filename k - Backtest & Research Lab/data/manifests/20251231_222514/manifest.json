@@ -1,0 +1,39 @@
+{
+  "run_id": "20251231_222514",
+  "timestamp": "2025-12-31T22:25:14.681626",
+  "python_version": "3.11.4",
+  "tickers": [
+    "SPY"
+  ],
+  "start": "2023-01-01",
+  "end": "2023-06-30",
+  "results": {
+    "SPY": {
+      "status": "success",
+      "source": "stooq",
+      "source_symbol": "SPY.US",
+      "raw_path": "data\\raw\\stooq\\SPY.US.csv",
+      "actions_path": null,
+      "cached": false,
+      "row_count": 124,
+      "date_coverage": {
+        "start": "2023-01-03",
+        "end": "2023-06-30"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.046153846153846156,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "6dfbd6b5286b858e0989928192adafad86a7c07479541f4fcf5bd9f5bf677257"
+    }
+  }
+}

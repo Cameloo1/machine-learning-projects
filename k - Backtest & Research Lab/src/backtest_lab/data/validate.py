@@ -9,7 +9,9 @@ from pandas.api.types import is_datetime64_any_dtype
 logger = logging.getLogger(__name__)
 
 DEFAULT_REQUIRED_COLS = ["ts", "symbol", "open", "high", "low", "close", "volume"]
+OHLCV_COLS = ["open", "high", "low", "close", "volume"]
 SCHEMA_VERSION = "prices_validator_v1"
+INTEGRITY_VERSION = "data_integrity_v1"
 
 
 def _ts_to_str(value: Any) -> str:
@@ -91,6 +93,70 @@ def _sample_monotonic_violations(
                 return
 
 
+def _summary_stats(df: pd.DataFrame, cols: List[str]) -> Dict[str, Dict[str, float | None]]:
+    stats: Dict[str, Dict[str, float | None]] = {}
+    for col in cols:
+        series = pd.to_numeric(df[col], errors="coerce")
+        if len(series) == 0:
+            stats[col] = {"min": None, "max": None, "mean": None}
+        else:
+            stats[col] = {
+                "min": float(series.min(skipna=True)),
+                "max": float(series.max(skipna=True)),
+                "mean": float(series.mean(skipna=True)),
+            }
+    return stats
+
+
+def _duplicate_diagnostics(df: pd.DataFrame, limit: int = 10) -> Dict[str, Any]:
+    if len(df) == 0:
+        return {
+            "duplicate_count_before": 0,
+            "duplicate_extra_rows": 0,
+            "duplicate_keys": [],
+            "duplicates_by_symbol": {},
+            "duplicates_by_ts": {},
+            "duplicate_conflict_count": 0,
+            "duplicate_conflict_samples": [],
+        }
+
+    key_counts = df.groupby(["ts", "symbol"], sort=False).size()
+    dup_keys = key_counts[key_counts > 1]
+    duplicate_rows = int(dup_keys.sum())
+    duplicate_extra_rows = int((dup_keys - 1).sum())
+
+    dup_rows = df[df.duplicated(subset=["ts", "symbol"], keep=False)]
+    duplicates_by_symbol = dup_rows.groupby("symbol", sort=True).size().to_dict()
+    duplicates_by_symbol = {str(k): int(v) for k, v in duplicates_by_symbol.items()}
+    duplicates_by_ts = dup_rows.groupby("ts", sort=True).size().to_dict()
+    duplicates_by_ts = {_ts_to_str(k): int(v) for k, v in list(duplicates_by_ts.items())[:limit]}
+
+    dup_key_samples = []
+    for (ts_val, symbol), count in list(dup_keys.items())[:limit]:
+        dup_key_samples.append(
+            {"ts": _ts_to_str(ts_val), "symbol": str(symbol), "count": int(count)}
+        )
+
+    duplicate_conflict_samples: List[Dict[str, str]] = []
+    duplicate_conflict_count = 0
+    if not dup_rows.empty:
+        grouped = dup_rows.groupby(["ts", "symbol"], sort=False)
+        conflict_mask = grouped[OHLCV_COLS].nunique(dropna=False).gt(1).any(axis=1)
+        duplicate_conflict_count = int(conflict_mask.sum())
+        for (ts_val, symbol) in list(conflict_mask[conflict_mask].index)[:limit]:
+            duplicate_conflict_samples.append({"ts": _ts_to_str(ts_val), "symbol": str(symbol)})
+
+    return {
+        "duplicate_count_before": duplicate_rows,
+        "duplicate_extra_rows": duplicate_extra_rows,
+        "duplicate_keys": dup_key_samples,
+        "duplicates_by_symbol": duplicates_by_symbol,
+        "duplicates_by_ts": duplicates_by_ts,
+        "duplicate_conflict_count": duplicate_conflict_count,
+        "duplicate_conflict_samples": duplicate_conflict_samples,
+    }
+
+
 def validate_prices(
     prices: pd.DataFrame,
     *,
@@ -150,6 +216,18 @@ def validate_prices(
             f"Missing required columns: {missing_cols}. Columns found: {list(df.columns)}"
         )
 
+    duplicate_diag = _duplicate_diagnostics(df)
+    if duplicate_diag["duplicate_count_before"]:
+        logger.warning(
+            "Detected duplicate (ts, symbol) rows before cleaning: %s",
+            duplicate_diag["duplicate_count_before"],
+        )
+    if duplicate_diag["duplicate_conflict_count"]:
+        raise ValueError(
+            f"Duplicate keys with conflicting OHLCV values detected: "
+            f"{duplicate_diag['duplicate_conflict_samples']}"
+        )
+
     raw_ts = df["ts"].copy()
     if not is_datetime64_any_dtype(df["ts"]):
         df["ts"] = pd.to_datetime(df["ts"], errors="coerce")
@@ -171,6 +249,8 @@ def validate_prices(
 
     df = df.sort_values(["symbol", "ts"], ascending=True, kind="mergesort").reset_index(drop=True)
     logger.info("Sorted prices by symbol and ts")
+
+    before_dedup = df.copy()
 
     if duplicate_policy != "keep_first_after_sort":
         raise ValueError(f"Unsupported duplicate_policy: {duplicate_policy}")
@@ -237,6 +317,28 @@ def validate_prices(
     n_rows_out = int(len(df))
     n_symbols_out = int(df["symbol"].nunique())
 
+    before_comp = before_dedup.drop_duplicates(subset=["ts", "symbol"], keep="first")
+    compare = df.merge(
+        before_comp[["ts", "symbol"] + OHLCV_COLS],
+        on=["ts", "symbol"],
+        how="left",
+        suffixes=("", "_before"),
+    )
+    changed_value_rows = {}
+    for col in OHLCV_COLS:
+        changed_value_rows[col] = int((compare[col] != compare[f"{col}_before"]).sum())
+
+    integrity_report = {
+        "integrity_version": INTEGRITY_VERSION,
+        "row_count_before": n_rows_in,
+        "row_count_after": n_rows_out,
+        "duplicate_count_before": duplicate_diag["duplicate_count_before"],
+        "duplicate_extra_rows": duplicate_diag["duplicate_extra_rows"],
+        "summary_before": _summary_stats(prices, OHLCV_COLS),
+        "summary_after": _summary_stats(df, OHLCV_COLS),
+        "changed_value_rows": changed_value_rows,
+    }
+
     diagnostics: Dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "n_rows_in": n_rows_in,
@@ -255,6 +357,8 @@ def validate_prices(
         "missingness_by_symbol": missingness_by_symbol,
         "ts_min": ts_min,
         "ts_max": ts_max,
+        "duplicate_diagnostics": duplicate_diag,
+        "data_integrity_report": integrity_report,
     }
 
     if missing_cols:

@@ -63,4 +63,4 @@ def test_e2e_pipeline_outputs_exist(tmp_path: Path) -> None:
         assert (artifacts_dir / name).stat().st_size > 0
 
     diagnostics = json.loads((artifacts_dir / "diagnostics.json").read_text(encoding="utf-8"))
-    assert set(diagnostics.keys()) == {"validate", "universe", "alignment", "warmup"}
+    assert set(diagnostics.keys()) == {"validate", "universe", "alignment", "warmup", "benchmark"}

@@ -1,0 +1,9 @@
+{
+  "config_path": "C:\\Users\\wasam\\OneDrive\\Desktop\\ml_projects\\k - Backtest & Research Lab\\configs\\sma_spy.yaml",
+  "config_sha256": "6599ffcd1dbc1965bac1a7ce257fa5639e981659768d077d21e067e6a03a0ea5",
+  "created_at_utc": "2026-01-01T17:44:56.288793+00:00",
+  "git_commit": "71e35c2713e7f1f4d724234f4a5374993d74891b",
+  "platform": "Windows-10-10.0.26100-SP0",
+  "python_version": "3.11.4",
+  "run_id": "sma_spy"
+}

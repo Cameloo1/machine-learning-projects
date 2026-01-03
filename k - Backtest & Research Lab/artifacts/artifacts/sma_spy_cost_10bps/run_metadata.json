@@ -1,0 +1,9 @@
+{
+  "config_path": "C:\\Users\\wasam\\OneDrive\\Desktop\\ml_projects\\k - Backtest & Research Lab\\artifacts\\sma_spy_cost_10bps.yaml",
+  "config_sha256": "322d3ea59efdd83c518cd1787ab539fda2ddb297517567cd1c817690bc2ae3de",
+  "created_at_utc": "2026-01-01T03:07:38.390731+00:00",
+  "git_commit": "71e35c2713e7f1f4d724234f4a5374993d74891b",
+  "platform": "Windows-10-10.0.26100-SP0",
+  "python_version": "3.11.4",
+  "run_id": "sma_spy_cost_10bps"
+}

@@ -1,0 +1,9 @@
+{
+  "config_path": "C:\\Users\\wasam\\OneDrive\\Desktop\\ml_projects\\k - Backtest & Research Lab\\configs\\walkforward_ew_multi.yaml",
+  "config_sha256": "16a0b82c27f4f2ff9991ba3d6d1a64cd0b3ef3a3ab238b316ba01454f3dd2e57",
+  "created_at_utc": "2026-01-01T16:25:39.752661+00:00",
+  "git_commit": "71e35c2713e7f1f4d724234f4a5374993d74891b",
+  "platform": "Windows-10-10.0.26100-SP0",
+  "python_version": "3.11.4",
+  "run_id": "walkforward_ew_multi"
+}

@@ -1,0 +1,82 @@
+{
+  "alignment": {
+    "n_extra_weight_keys": 0,
+    "n_filled_weight_rows": 0,
+    "n_missing_weight_keys": 0,
+    "n_price_rows": 0,
+    "n_unique_price_keys": 0,
+    "n_unique_weight_keys": 0,
+    "n_weight_rows": 0,
+    "strict_weight_alignment": false
+  },
+  "universe": {
+    "asset_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "coverage_by_symbol": [
+      {
+        "drop_reason": "min_history",
+        "eligible": false,
+        "min_history_ok": false,
+        "n_complete_rows": 120,
+        "n_missing_rows": 0,
+        "n_rows": 120,
+        "n_rows_after_policy": 120,
+        "symbol": "spy"
+      }
+    ],
+    "dropped_symbols": [
+      "spy"
+    ],
+    "end_ts": "2023-06-16T00:00:00",
+    "final_assets": [],
+    "min_history": 252,
+    "missing_data_policy": "drop_symbol",
+    "n_rows_after_policy": 120,
+    "n_rows_in_window": 120,
+    "n_symbols_in": 1,
+    "n_symbols_out": 0,
+    "rows_dropped_missing": 0,
+    "start_ts": "2023-01-02T00:00:00"
+  },
+  "validate": {
+    "dup_key_samples": [],
+    "duplicate_policy": "keep_first_after_sort",
+    "missingness_by_symbol": [
+      {
+        "n_rows": 120,
+        "null_close": 0,
+        "null_high": 0,
+        "null_low": 0,
+        "null_open": 0,
+        "null_volume": 0,
+        "symbol": "spy"
+      }
+    ],
+    "missingness_global": {
+      "close": 0,
+      "high": 0,
+      "low": 0,
+      "open": 0,
+      "symbol": 0,
+      "ts": 0,
+      "volume": 0
+    },
+    "n_bad_ts": 0,
+    "n_dup_keys": 0,
+    "n_dup_rows_removed": 0,
+    "n_empty_symbol": 0,
+    "n_null_close": 0,
+    "n_rows_dropped_null_close": 0,
+    "n_rows_in": 120,
+    "n_rows_out": 120,
+    "n_symbols_in": 1,
+    "n_symbols_out": 1,
+    "schema_version": "prices_validator_v1",
+    "ts_max": "2023-06-16T00:00:00",
+    "ts_min": "2023-01-02T00:00:00"
+  },
+  "warmup": {
+    "warmup_nan_rows": 0,
+    "warmup_nan_rows_by_symbol": {},
+    "warmup_policy": "zero_weight"
+  }
+}

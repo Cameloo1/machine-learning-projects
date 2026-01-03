@@ -1,0 +1,291 @@
+{
+  "run_id": "20260101_032100",
+  "timestamp": "2026-01-01T03:21:00.344233",
+  "python_version": "3.11.4",
+  "tickers": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "EFA",
+    "EEM",
+    "TLT",
+    "GLD",
+    "USO",
+    "XLF",
+    "XLK"
+  ],
+  "start": "2016-01-01",
+  "end": "2024-01-01",
+  "results": {
+    "SPY": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "SPY",
+      "raw_path": "data\\raw\\yahoo\\SPY.csv",
+      "actions_path": "data\\raw\\yahoo\\SPY_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "20b77d98234dc3ff157a01b7babacac98c8c261202135572598faebbaf8f77bc"
+    },
+    "QQQ": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "QQQ",
+      "raw_path": "data\\raw\\yahoo\\QQQ.csv",
+      "actions_path": "data\\raw\\yahoo\\QQQ_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "a5e343eedd3dd4fa3c0717ce7cc03bfcb01d4a42de76345f3f195a066d9f4a85"
+    },
+    "IWM": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "IWM",
+      "raw_path": "data\\raw\\yahoo\\IWM.csv",
+      "actions_path": "data\\raw\\yahoo\\IWM_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "8da97845e0f759495366e570ff6b958348e86b871c56069067c730d07d90b394"
+    },
+    "EFA": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "EFA",
+      "raw_path": "data\\raw\\yahoo\\EFA.csv",
+      "actions_path": "data\\raw\\yahoo\\EFA_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "a497aac3b2d2e46f72cb820a911e39436f07e27d00a85df7560baef537f2156e"
+    },
+    "EEM": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "EEM",
+      "raw_path": "data\\raw\\yahoo\\EEM.csv",
+      "actions_path": "data\\raw\\yahoo\\EEM_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "dd7bbb52932032a98b62f9d97a427f31abb6df727d0279ecb0262fc8987ea39f"
+    },
+    "TLT": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "TLT",
+      "raw_path": "data\\raw\\yahoo\\TLT.csv",
+      "actions_path": "data\\raw\\yahoo\\TLT_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "f81432317d67111c1050eaa3234c8f4f8f5ac16da544d8e4f5789ad0d50dac26"
+    },
+    "GLD": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "GLD",
+      "raw_path": "data\\raw\\yahoo\\GLD.csv",
+      "actions_path": "data\\raw\\yahoo\\GLD_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "d362211984e23aef78fb317816b9dbe08f6eee0f13074dda8b37ef9c4507aa56"
+    },
+    "USO": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "USO",
+      "raw_path": "data\\raw\\yahoo\\USO.csv",
+      "actions_path": "data\\raw\\yahoo\\USO_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "e6e85e94a94b2521b0d1ee01133d07ca1fbd349257f9a99e30531ef64afbafe7"
+    },
+    "XLF": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "XLF",
+      "raw_path": "data\\raw\\yahoo\\XLF.csv",
+      "actions_path": "data\\raw\\yahoo\\XLF_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "0abb720381ac2b5c73d67d5442dc10ae2b8bb67c465d531a826337f6340a8e89"
+    },
+    "XLK": {
+      "status": "success",
+      "source": "yahoo",
+      "source_symbol": "XLK",
+      "raw_path": "data\\raw\\yahoo\\XLK.csv",
+      "actions_path": "data\\raw\\yahoo\\XLK_actions.csv",
+      "cached": false,
+      "row_count": 2012,
+      "date_coverage": {
+        "start": "2016-01-04",
+        "end": "2023-12-29"
+      },
+      "missingness": {
+        "ts": 0,
+        "symbol": 0,
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0,
+        "volume": 0
+      },
+      "duplicate_timestamps_removed": 0,
+      "missing_days_pct": 0.035936751317680884,
+      "outlier_returns": [],
+      "price_violation_pct": 0.0,
+      "sha256": "0db338c575911d3bc837dcd145e7bd9adf0fb82166327ed4f6a69530576b6cd3"
+    }
+  }
+}

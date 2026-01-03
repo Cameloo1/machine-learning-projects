@@ -44,6 +44,15 @@ def _infer_symbol(path: Path) -> str:
     return symbol
 
 
+def _csv_has_required_cols(path: Path) -> bool:
+    try:
+        sample = pd.read_csv(path, nrows=5)
+    except Exception:
+        return False
+    cols = {_normalize_column_name(col) for col in sample.columns}
+    return set(REQUIRED_COLS).issubset(cols) and any(col in cols for col in DATE_COLS)
+
+
 def _standardize_prices_df(
     raw: pd.DataFrame, symbol: str | None, source: Path | None = None
 ) -> pd.DataFrame:
@@ -137,7 +146,13 @@ def load_prices_from_csv_dir(dir_path: str | Path) -> pd.DataFrame:
 
     frames: List[pd.DataFrame] = []
     for csv_file in csv_files:
+        if not _csv_has_required_cols(csv_file):
+            logger.warning("Skipping non-price CSV file: %s", csv_file)
+            continue
         frames.append(load_prices_from_csv(csv_file, symbol=_infer_symbol(csv_file)))
+
+    if not frames:
+        raise ValueError(f"No valid price CSV files found in directory: {csv_dir}")
 
     combined = pd.concat(frames, ignore_index=True)
     combined = combined.sort_values(["ts", "symbol"]).reset_index(drop=True)

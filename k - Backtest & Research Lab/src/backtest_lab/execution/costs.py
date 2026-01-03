@@ -1,77 +1,68 @@
 from __future__ import annotations
 
-import logging
 from typing import Any, Dict, Tuple
 
 import pandas as pd
 
-logger = logging.getLogger(__name__)
 
-
-def _rolling_vol(prices: pd.DataFrame, window: int) -> pd.DataFrame:
-    df = prices[["ts", "symbol", "close"]].copy()
-    df = df.sort_values(["symbol", "ts"], kind="mergesort")
-    df["ret"] = df.groupby("symbol", sort=False)["close"].pct_change()
-    df["rolling_vol"] = df.groupby("symbol", sort=False)["ret"].transform(
-        lambda s: s.rolling(window=window).std(ddof=0)
-    )
-    return df[["ts", "symbol", "rolling_vol"]]
-
-
-def compute_trade_costs(
-    trades_df: pd.DataFrame,
-    prices: pd.DataFrame,
-    cfg: Dict[str, Any],
-    *,
-    diagnostics: Dict[str, Any] | None = None,
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    """
-    Compute transaction and slippage costs for each trade row.
-    """
-    df = trades_df.copy()
+def compute_trade_deltas(weights: pd.DataFrame) -> pd.DataFrame:
+    required = {"ts", "symbol", "weight"}
+    missing = required - set(weights.columns)
+    if missing:
+        raise ValueError(f"compute_trade_deltas missing columns: {sorted(missing)}")
+    df = weights.sort_values(["symbol", "ts"], kind="mergesort").copy()
+    df["dw"] = df.groupby("symbol", sort=False)["weight"].diff().fillna(df["weight"])
     df["abs_dw"] = df["dw"].abs()
+    return df
 
-    cost_bps = float(cfg.get("cost_bps", 0.0))
-    df["txn_cost"] = df["abs_dw"] * (cost_bps / 10000.0)
 
-    slippage_model = cfg.get("slippage_model", "none")
-    slippage_params = cfg.get("slippage_params", {}) or {}
-    df["slippage_cost"] = 0.0
+def compute_turnover(weights: pd.DataFrame) -> pd.DataFrame:
+    df = compute_trade_deltas(weights)
+    turnover = df.groupby("ts", sort=False)["abs_dw"].sum().reset_index()
+    return turnover.rename(columns={"abs_dw": "turnover"})
 
-    if slippage_model == "bps":
-        slip_bps = float(slippage_params.get("slippage_bps", 0.0))
-        df["slippage_cost"] = df["abs_dw"] * (slip_bps / 10000.0)
+
+def compute_costs(
+    trades: pd.DataFrame,
+    *,
+    cost_bps: float,
+    slippage_model: str,
+    slippage_params: Dict[str, Any] | None = None,
+    rolling_vol: pd.DataFrame | None = None,
+) -> Tuple[pd.DataFrame, pd.DataFrame, Dict[str, Any]]:
+    trades = trades.copy()
+    trades["abs_dw"] = trades["dw"].abs()
+    trades["txn_cost"] = trades["abs_dw"] * (float(cost_bps) / 10000.0)
+
+    slippage_model = str(slippage_model)
+    params = dict(slippage_params or {})
+    missing_vol = 0
+
+    if slippage_model == "none":
+        trades["slippage_cost"] = 0.0
+    elif slippage_model == "bps":
+        slip_bps = float(params.get("slip_bps", 0.0))
+        trades["slippage_cost"] = trades["abs_dw"] * (slip_bps / 10000.0)
     elif slippage_model == "vol_prop":
-        vol_window = int(slippage_params.get("vol_window", 0))
-        slip_mult = float(slippage_params.get("slip_mult", 0.0))
-        if vol_window < 2:
-            raise ValueError("slippage_params.vol_window must be >= 2 for vol_prop")
-        vol_df = _rolling_vol(prices, window=vol_window)
-        df = df.merge(vol_df, on=["ts", "symbol"], how="left")
-        n_missing_vol = int(df["rolling_vol"].isna().sum())
-        if n_missing_vol:
-            logger.info("Missing rolling vol for slippage rows: %s", n_missing_vol)
-        df["slippage_cost"] = df["abs_dw"] * df["rolling_vol"].fillna(0.0) * slip_mult
-        df = df.drop(columns=["rolling_vol"])
-    elif slippage_model == "none":
-        pass
+        if rolling_vol is None:
+            raise ValueError("rolling_vol required when slippage_model == 'vol_prop'")
+        slip_mult = float(params.get("slip_mult", 0.0))
+        trades = trades.merge(rolling_vol, on=["ts", "symbol"], how="left")
+        missing_vol = int(trades["rolling_vol"].isna().sum())
+        trades["slippage_cost"] = trades["abs_dw"] * trades["rolling_vol"].fillna(0.0) * slip_mult
+        trades = trades.drop(columns=["rolling_vol"])
     else:
         raise ValueError(f"Unsupported slippage_model: {slippage_model}")
 
-    df["cost"] = df["txn_cost"] + df["slippage_cost"]
+    trades["total_cost"] = trades["txn_cost"] + trades["slippage_cost"]
+    costs_by_ts = trades.groupby("ts", sort=False)[["txn_cost", "slippage_cost", "total_cost"]].sum()
+    costs_by_ts = costs_by_ts.reset_index()
 
-    costs_by_ts = (
-        df.groupby("ts", sort=False)[["txn_cost", "slippage_cost", "cost"]].sum().reset_index()
-    )
+    diagnostics = {
+        "cost_bps": float(cost_bps),
+        "slippage_model": slippage_model,
+        "slippage_params": params,
+        "slippage_missing_vol_rows": int(missing_vol),
+    }
 
-    if diagnostics is not None:
-        diagnostics.update(
-            {
-                "cost_bps": cost_bps,
-                "slippage_model": slippage_model,
-                "slippage_params": slippage_params,
-                "costs_total": float(df["cost"].sum()) if len(df) else 0.0,
-            }
-        )
-
-    return df, costs_by_ts
+    return trades, costs_by_ts, diagnostics

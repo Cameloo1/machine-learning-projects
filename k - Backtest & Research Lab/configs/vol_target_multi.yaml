@@ -1,10 +1,9 @@
 run_id: vol_target_multi
 output_dir: ../artifacts
 data:
-  mode: yfinance
-  cache_dir: ../data/raw/yahoo
-  start: 2016-01-01
-  end: 2024-01-01
+  mode: csv
+  prices_path: ../data/processed/prices_long.csv
+  cache_dir: ../data/raw
 universe:
   symbols:
     - SPY

@@ -1,0 +1,12 @@
+{
+  "annual_vol": 0.0,
+  "cagr": 0.0,
+  "costs_avg": 0.0,
+  "end_ts": null,
+  "max_drawdown": 0.0,
+  "n_periods": 0,
+  "sharpe": 0.0,
+  "start_ts": null,
+  "turnover_avg": 0.0,
+  "win_rate": 0.0
+}

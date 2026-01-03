@@ -1,0 +1,41 @@
+run_id: walkforward_ew_multi
+output_dir: ../artifacts
+data:
+  mode: csv
+  prices_path: ../data/processed/prices_long.csv
+  cache_dir: ../data/raw
+universe:
+  symbols:
+    - SPY
+    - QQQ
+    - IWM
+    - EFA
+    - EEM
+    - TLT
+    - GLD
+    - USO
+    - XLF
+    - XLK
+  min_history_days: 252
+  missing_data_policy: drop_symbol
+features:
+  sma_fast: 20
+  sma_slow: 50
+  rsi_window: 14
+  rsi_low: 30
+  rsi_high: 70
+strategy:
+  name: equal_weight
+  params:
+    rebalance_frequency: monthly
+execution:
+  cost_bps: 2.0
+  slippage_model: none
+  slippage_params: {}
+  max_leverage: 1.0
+  max_weight_per_asset: 0.25
+walkforward:
+  enabled: true
+  train_days: 252
+  test_days: 63
+  step_days: 63

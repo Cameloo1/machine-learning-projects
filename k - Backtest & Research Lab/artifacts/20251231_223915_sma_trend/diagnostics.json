@@ -1,0 +1,23 @@
+{
+  "data": {
+    "missingness": {
+      "close": 0,
+      "high": 0,
+      "low": 0,
+      "open": 0,
+      "symbol": 0,
+      "ts": 0,
+      "volume": 0
+    },
+    "rows": 120,
+    "symbols": 1
+  },
+  "features_missingness": {
+    "close": 0,
+    "sma_fast": 19,
+    "sma_slow": 49,
+    "symbol": 0,
+    "ts": 0
+  },
+  "run_id": "20251231_223915_sma_trend"
+}

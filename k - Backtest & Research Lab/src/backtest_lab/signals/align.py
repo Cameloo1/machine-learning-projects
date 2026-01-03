@@ -77,10 +77,26 @@ def align_weights_to_returns(
         logger.info("Filled missing weights with zeros: %s", n_filled)
     merged["weight"] = merged["weight"].fillna(0.0)
 
+    weight_pre_zero = merged["weight"].copy()
     n_missing_returns = int(merged["ret_fwd"].isna().sum())
+    forced_zero_mask = merged["ret_fwd"].isna() & (weight_pre_zero != 0)
+    forced_zero_count = int(forced_zero_mask.sum())
     if n_missing_returns:
         logger.warning("Missing next-day returns detected, zeroing weights: %s", n_missing_returns)
         merged.loc[merged["ret_fwd"].isna(), "weight"] = 0.0
+
+    forced_zero_top = []
+    if forced_zero_count:
+        counts = (
+            merged.loc[forced_zero_mask]
+            .groupby("symbol", sort=False)
+            .size()
+            .sort_values(ascending=False)
+            .head(5)
+        )
+        forced_zero_top = [
+            {"symbol": str(symbol), "count": int(count)} for symbol, count in counts.items()
+        ]
 
     diagnostics.update(
         {
@@ -93,6 +109,8 @@ def align_weights_to_returns(
             "n_extra_weight_keys": n_extra,
             "n_filled_weight_rows": n_filled,
             "n_missing_returns": n_missing_returns,
+            "alignment_forced_zero_count": forced_zero_count,
+            "alignment_forced_zero_by_symbol_top": forced_zero_top,
             "n_gap_returns": int(gap_mask.sum()),
             "strict_weight_alignment": bool(strict),
         }

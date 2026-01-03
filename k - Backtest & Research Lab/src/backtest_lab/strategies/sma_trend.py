@@ -7,7 +7,7 @@ from typing import Any, Dict
 import numpy as np
 import pandas as pd
 
-from backtest_lab.strategies.base import StrategyBase
+from backtest_lab.strategies.base import StrategyBase, validate_weights_df
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +24,9 @@ class SmaTrendStrategy(StrategyBase):
         *,
         diagnostics: Dict[str, Any] | None = None,
     ) -> pd.DataFrame:
-        max_leverage = cfg["execution"]["max_leverage"]
-        max_weight = cfg["execution"]["max_weight_per_asset"]
+        internal_controls = bool(cfg.get("strategy_internal_risk_controls", False))
+        max_leverage = cfg.get("execution", {}).get("max_leverage")
+        max_weight = cfg.get("execution", {}).get("max_weight_per_asset")
 
         required_cols = {"ts", "symbol", "sma_fast", "sma_slow"}
         if not required_cols.issubset(features.columns):
@@ -67,16 +68,19 @@ class SmaTrendStrategy(StrategyBase):
         active_counts = df.groupby("ts")["signal"].transform("sum")
         base_weight = df["signal"] / active_counts
         base_weight = base_weight.fillna(0.0)
-        weight = base_weight.clip(upper=max_weight)
+        weight = base_weight
 
-        total = weight.groupby(df["ts"]).transform("sum")
-        scale = np.where(total > max_leverage, max_leverage / total, 1.0)
-        weight = weight * scale
+        if internal_controls:
+            if max_leverage is None or max_weight is None:
+                raise ValueError("strategy_internal_risk_controls requires execution caps")
+            weight = weight.clip(upper=float(max_weight))
+            total = weight.groupby(df["ts"]).transform("sum")
+            scale = np.where(total > float(max_leverage), float(max_leverage) / total, 1.0)
+            weight = weight * scale
 
         weights = df[["ts", "symbol"]].copy()
         weights["weight"] = weight
 
-        if not set(weights["symbol"].unique()).issubset(set(prices["symbol"].unique())):
-            raise ValueError("Weights contain symbols not present in prices")
+        validate_weights_df(weights, prices=prices)
 
         return weights

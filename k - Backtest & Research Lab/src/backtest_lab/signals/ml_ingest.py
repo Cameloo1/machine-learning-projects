@@ -44,5 +44,8 @@ def load_predictions(
         raise ValueError("Predictions contain non-numeric pred values")
 
     df = df.sort_values(["symbol", "ts"], kind="mergesort").reset_index(drop=True)
+    if df.duplicated(subset=["ts", "symbol"]).any():
+        dup_count = int(df.duplicated(subset=["ts", "symbol"]).sum())
+        raise ValueError(f"Predictions contain duplicate ts/symbol rows: {dup_count}")
     logger.info("Loaded predictions %s rows=%s", csv_path, len(df))
     return df

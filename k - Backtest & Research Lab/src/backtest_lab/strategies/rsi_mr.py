@@ -7,7 +7,7 @@ from typing import Any, Dict
 import numpy as np
 import pandas as pd
 
-from backtest_lab.strategies.base import StrategyBase
+from backtest_lab.strategies.base import StrategyBase, validate_weights_df
 
 logger = logging.getLogger(__name__)
 
@@ -55,14 +55,20 @@ class RsiMeanReversionStrategy(StrategyBase):
             diagnostics["warmup_nan_rows_by_symbol"] = warmup_by_symbol
 
         df["signal"] = 0.0
-        ready_mask = ~warmup_mask
-        if ready_mask.any():
-            # Decision: long below rsi_low, short above rsi_high, flat otherwise.
-            df.loc[ready_mask, "signal"] = np.where(
-                df.loc[ready_mask, "rsi"] < rsi_low,
-                1.0,
-                np.where(df.loc[ready_mask, "rsi"] > rsi_high, -1.0, 0.0),
-            )
+        if (~warmup_mask).any():
+            for symbol, group in df.groupby("symbol", sort=False):
+                pos = 0.0
+                signals = []
+                for _, row in group.iterrows():
+                    rsi = row["rsi"]
+                    if pd.isna(rsi):
+                        pos = 0.0
+                    elif rsi < rsi_low:
+                        pos = 1.0
+                    elif rsi > rsi_high:
+                        pos = 0.0
+                    signals.append(pos)
+                df.loc[group.index, "signal"] = signals
 
         active_counts = df.groupby("ts")["signal"].transform(lambda s: (s != 0).sum())
         weight = df["signal"] / active_counts.replace(0, np.nan)
@@ -71,7 +77,8 @@ class RsiMeanReversionStrategy(StrategyBase):
         weights = df[["ts", "symbol"]].copy()
         weights["weight"] = weight
 
-        if not set(weights["symbol"].unique()).issubset(set(prices["symbol"].unique())):
-            raise ValueError("Weights contain symbols not present in prices")
+        if diagnostics is not None:
+            diagnostics["rsi_policy"] = "stateful_enter_exit"
+        validate_weights_df(weights, prices=prices)
 
         return weights
