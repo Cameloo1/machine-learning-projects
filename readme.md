@@ -1,10 +1,10 @@
 # ML Projects Portfolio
-Compact collection of self-contained ML projects (finance, SOC, NLP, RL, and API) with runnable scripts, notebooks, and saved artifacts.
+Compact collection of self-contained ML projects (finance, cybersec, and others) with runnable scripts, notebooks, and saved artifacts.
 
 ![Python](https://img.shields.io/badge/python-%3E%3D3.11-blue)
 
 ## What this repo contains
-- 10 independent subprojects, each in its own folder with its own dependencies and README.
+- 10 + 1 W.I.P. independent subprojects, each in its own folder with its own dependencies and README.
 - Runnable scripts and module entrypoints for training, evaluation, and inference.
 - Notebooks for exploration and training workflows.
 - Pre-generated artifacts and figures such as [artifacts/plots](<b - Short-Term Price Move Classifier - logistic regression, random forest, gradient boosting/artifacts/plots/>), [plots](<d - Synthetic SOC Alert Anomaly Detector - Unsupervised (isoforest + oneclassSVM)/plots/>), [results](<f - Sequence Model for Market Regime Vol Forecast  - (RNN1D-CNN Intro)/market_regime_seq_model/results/>), [reports](<g - Alert Triage Scorer (Ranking + Explainability)/alert-triage-ml/reports/>), and [outputs](<j - Mini Auto-ML Experiment Runner for Tabular Data/auto_experiment_runner/outputs/>).
@@ -26,6 +26,7 @@ Compact collection of self-contained ML projects (finance, SOC, NLP, RL, and API
 - Mini RL Trading Sandbox: DQN agent in [training/train.py](<h - Mini-RL Trading Sandbox (RL Fundamentals)/rl_trading_sandbox/rl_trading/training/train.py>) (inputs: intraday SPY CSV; outputs: [experiments](<h - Mini-RL Trading Sandbox (RL Fundamentals)/rl_trading_sandbox/experiments/>)).
 - Alert Risk Score API: HistGradientBoostingClassifier served by FastAPI in [app/main.py](<i - Risk Score API (Model as service)/risk-score-api/app/main.py>) (inputs: JSON alert features; outputs: label + probabilities).
 - Mini Auto-ML Experiment Runner: CLI-driven tabular experiments in [autotab/cli.py](<j - Mini Auto-ML Experiment Runner for Tabular Data/auto_experiment_runner/autotab/cli.py>) (inputs: CSV + YAML config; outputs: [outputs](<j - Mini Auto-ML Experiment Runner for Tabular Data/auto_experiment_runner/outputs/>) with reports, metrics, models).
+- Backtest & Research Lab
 
 ## Repo layout
 - `a - SPY Market Regime Clustering - KMeans/` KMeans clustering on SPY with saved plots.
