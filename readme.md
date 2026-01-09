@@ -4,7 +4,7 @@ Compact collection of self-contained ML projects (finance, cybersec, and others)
 ![Python](https://img.shields.io/badge/python-%3E%3D3.11-blue)
 
 ## What this repo contains
-- 10 + 1 W.I.P. independent subprojects, each in its own folder with its own dependencies and README.
+- 10 + 1 W.I.P. independent subproject, each in its own folder with its own dependencies and README.
 - Runnable scripts and module entrypoints for training, evaluation, and inference.
 - Notebooks for exploration and training workflows.
 - Pre-generated artifacts and figures such as [artifacts/plots](<b - Short-Term Price Move Classifier - logistic regression, random forest, gradient boosting/artifacts/plots/>), [plots](<d - Synthetic SOC Alert Anomaly Detector - Unsupervised (isoforest + oneclassSVM)/plots/>), [results](<f - Sequence Model for Market Regime Vol Forecast  - (RNN1D-CNN Intro)/market_regime_seq_model/results/>), [reports](<g - Alert Triage Scorer (Ranking + Explainability)/alert-triage-ml/reports/>), and [outputs](<j - Mini Auto-ML Experiment Runner for Tabular Data/auto_experiment_runner/outputs/>).
