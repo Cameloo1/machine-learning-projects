@@ -1,7 +1,9 @@
 """FastAPI application entrypoint."""
 import json
+from html import escape
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 from app.config import settings
@@ -19,6 +21,13 @@ app = FastAPI(
 
 # Initialize Jinja2 templates
 templates = Jinja2Templates(directory=str(settings.BASE_DIR / "app" / "templates"))
+
+# Serve demo UI assets
+app.mount(
+    "/static",
+    StaticFiles(directory=str(settings.BASE_DIR / "app" / "static")),
+    name="static",
+)
 
 # Initialize logger
 logger = get_logger("risk_score_api")
@@ -101,33 +110,28 @@ async def predict_form(
     )
     
     # Build HTML fragment
-    label_upper = result["label"].upper()
+    priority = result["label"]
+    label_upper = escape(priority.upper())
     confidence_pct = result["confidence"] * 100
-    
-    # Color based on priority
-    if result["label"] == "high":
-        label_color = "#ff4444"  # Red
-    elif result["label"] == "medium":
-        label_color = "#ffaa00"  # Orange
-    else:
-        label_color = "#44ff44"  # Green
+    explanation = escape(result["explanation"])
+    probabilities_json = escape(json.dumps(result["probabilities"], indent=2))
     
     html = f"""
-    <div style="margin-top: 20px; padding: 20px; border: 1px solid #45b3d6; background: #1a1b26;">
-        <h3 style="margin-top: 0; color: {label_color}; text-transform: uppercase; letter-spacing: 2px;">
+    <div class="result-card">
+        <h3 class="result-title priority-{priority}">
             Priority: {label_upper}
         </h3>
-        <p style="color: #c5c6c7; margin: 10px 0;">
+        <p>
             <strong>Confidence:</strong> {confidence_pct:.2f}%
         </p>
-        <p style="color: #c5c6c7; margin: 10px 0;">
-            <strong>Explanation:</strong> {result["explanation"]}
+        <p>
+            <strong>Explanation:</strong> {explanation}
         </p>
-        <details style="margin-top: 15px;">
-            <summary style="color: #45b3d6; cursor: pointer; padding: 5px 0;">
+        <details>
+            <summary>
                 Raw Probabilities (JSON)
             </summary>
-            <pre style="background: #0b0c10; padding: 10px; border: 1px solid #45b3d6; margin-top: 10px; color: #c5c6c7; overflow-x: auto;">{json.dumps(result["probabilities"], indent=2)}</pre>
+            <pre>{probabilities_json}</pre>
         </details>
     </div>
     """

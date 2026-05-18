@@ -44,3 +44,10 @@ Thumbs.db
 .env
 .env.local
 
+# Generated experiment reports
+k - Backtest & Research Lab/artifacts/**/report.html
+
+# Local verification workspaces and reports
+.verify/
+reports/reproducibility/
+

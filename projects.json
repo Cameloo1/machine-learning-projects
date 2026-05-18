@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "description": "Reproducibility contracts for the independent ML projects in this repository.",
+  "projects": [
+    {
+      "id": "a",
+      "name": "SPY Market Regime Clustering - KMeans",
+      "path": "a - SPY Market Regime Clustering - KMeans",
+      "python": ">=3.11",
+      "dependency_files": ["requirements.txt"],
+      "expected_paths": ["README.md", "requirements.txt", "model.py"],
+      "artifact_globs": ["spy_price_regimes*.png", "spy_vol_scatter*.png"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-r", "requirements.txt"], "requires_network": true}],
+      "commands": [
+        {
+          "name": "run regime clustering",
+          "level": "full",
+          "cmd": ["python", "model.py"],
+          "requires_network": true,
+          "expected_globs": ["spy_price_regimes*.png", "spy_vol_scatter*.png"],
+          "timeout_seconds": 600
+        }
+      ]
+    },
+    {
+      "id": "b",
+      "name": "Short-Term Price Move Classifier",
+      "path": "b - Short-Term Price Move Classifier - logistic regression, random forest, gradient boosting",
+      "python": ">=3.11",
+      "dependency_files": ["requirements.txt"],
+      "expected_paths": ["README.md", "requirements.txt", "short_term_price_classifier/run_experiment.py"],
+      "artifact_globs": ["artifacts/plots/*.png"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-r", "requirements.txt"], "requires_network": true}],
+      "commands": [
+        {
+          "name": "run classifier experiment",
+          "level": "full",
+          "cmd": ["python", "-m", "short_term_price_classifier.run_experiment"],
+          "requires_network": true,
+          "expected_globs": ["artifacts/plots/*.png"],
+          "timeout_seconds": 900
+        }
+      ]
+    },
+    {
+      "id": "c",
+      "name": "Next-Day Realized Volatility Forecasting",
+      "path": "c - Volatility Forecasting - Regression + Evaluation Discipline",
+      "python": ">=3.11",
+      "dependency_files": [],
+      "expected_paths": ["README.md", "vol_forecasting.py"],
+      "artifact_globs": ["SPY_volatility_forecast_comparison.png"],
+      "install": [
+        {
+          "cmd": ["python", "-m", "pip", "install", "numpy", "pandas", "yfinance", "matplotlib", "scikit-learn"],
+          "requires_network": true
+        }
+      ],
+      "commands": [
+        {
+          "name": "run volatility forecast",
+          "level": "full",
+          "cmd": ["python", "vol_forecasting.py"],
+          "requires_network": true,
+          "expected_globs": ["SPY_volatility_forecast_comparison.png"],
+          "timeout_seconds": 600
+        }
+      ]
+    },
+    {
+      "id": "d",
+      "name": "Synthetic SOC Alert Anomaly Detector",
+      "path": "d - Synthetic SOC Alert Anomaly Detector - Unsupervised (isoforest + oneclassSVM)",
+      "python": ">=3.11",
+      "dependency_files": ["requirements.txt"],
+      "expected_paths": ["README.md", "requirements.txt", "soc_anomaly", "scripts/generate_data.py", "scripts/run_anomaly_detection.py"],
+      "artifact_globs": ["data/*.csv", "plots/*.png"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-r", "requirements.txt"], "requires_network": true}],
+      "commands": [
+        {
+          "name": "generate small synthetic SOC dataset",
+          "level": "quick",
+          "cmd": ["python", "scripts/generate_data.py", "--output-path", "data/verify_soc_synthetic.csv", "--n-users", "20", "--events-per-user", "20", "--anomaly-fraction", "0.02", "--random-state", "42"],
+          "expected_globs": ["data/verify_soc_synthetic.csv"],
+          "timeout_seconds": 120
+        },
+        {
+          "name": "run anomaly detectors",
+          "level": "full",
+          "cmd": ["python", "scripts/run_anomaly_detection.py", "--data-path", "data/verify_soc_synthetic.csv"],
+          "expected_globs": ["plots/*.png"],
+          "timeout_seconds": 600
+        }
+      ]
+    },
+    {
+      "id": "e",
+      "name": "News Headline Sentiment",
+      "path": "e - Text & Tabular News Headline Sentiment for Tickers (NLP Intro)",
+      "python": ">=3.11",
+      "dependency_files": ["requirements.txt"],
+      "expected_paths": ["README.md", "requirements.txt", "src/train.py", "scripts/run_end_to_end.py"],
+      "artifact_globs": ["reports/model_comparison.md", "reports/figures/*.png", "reports/*.csv"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-r", "requirements.txt"], "requires_network": true}],
+      "commands": [
+        {
+          "name": "run sentiment pipeline",
+          "level": "full",
+          "cmd": ["python", "scripts/run_end_to_end.py"],
+          "requires_network": true,
+          "expected_globs": ["reports/model_comparison.md", "reports/figures/*.png"],
+          "timeout_seconds": 900
+        }
+      ]
+    },
+    {
+      "id": "f",
+      "name": "Market Regime Sequence Model",
+      "path": "f - Sequence Model for Market Regime Vol Forecast  - (RNN1D-CNN Intro)/market_regime_seq_model",
+      "python": ">=3.11",
+      "dependency_files": ["requirements.txt"],
+      "expected_paths": ["README.md", "requirements.txt", "main.py", "src"],
+      "artifact_globs": ["data/processed/*.npy", "data/regimes/*.csv", "models/*.pkl", "results/metrics/*.json", "results/plots/*.png", "results/explainability/*.png"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-r", "requirements.txt"], "requires_network": true}],
+      "commands": [
+        {
+          "name": "run sequence modeling pipeline",
+          "level": "full",
+          "cmd": ["python", "main.py"],
+          "requires_network": true,
+          "expected_globs": ["results/metrics/*.json", "results/plots/*.png"],
+          "timeout_seconds": 1800
+        }
+      ]
+    },
+    {
+      "id": "g",
+      "name": "Alert Triage Scorer",
+      "path": "g - Alert Triage Scorer (Ranking + Explainability)/alert-triage-ml",
+      "python": ">=3.11",
+      "dependency_files": ["requirements.txt"],
+      "expected_paths": ["README.md", "requirements.txt", "src"],
+      "artifact_globs": ["data/raw/*.csv", "data/processed/*.csv", "models/*.pkl", "artifacts/metrics/*.json", "artifacts/plots/*.png", "artifacts/shap/*.png", "reports/*.md"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-r", "requirements.txt"], "requires_network": true}],
+      "commands": [
+        {
+          "name": "generate small triage dataset",
+          "level": "quick",
+          "cmd": ["python", "-m", "src.data_generation", "--n_samples", "1500"],
+          "expected_globs": ["data/raw/alerts_synthetic.csv"],
+          "timeout_seconds": 120
+        },
+        {
+          "name": "train fast triage models",
+          "level": "full",
+          "cmd": ["python", "-m", "src.train", "--search-iterations", "5", "--cv-folds", "3"],
+          "expected_globs": ["models/*.pkl", "artifacts/metrics/*.json"],
+          "timeout_seconds": 1800
+        },
+        {
+          "name": "evaluate triage models",
+          "level": "full",
+          "cmd": ["python", "-m", "src.evaluate"],
+          "expected_globs": ["artifacts/plots/*.png"],
+          "timeout_seconds": 600
+        }
+      ]
+    },
+    {
+      "id": "h",
+      "name": "Mini-RL Trading Sandbox",
+      "path": "h - Mini-RL Trading Sandbox (RL Fundamentals)/rl_trading_sandbox",
+      "python": ">=3.11",
+      "dependency_files": ["requirements.txt"],
+      "expected_paths": ["README.md", "requirements.txt", "rl_trading", "scripts/download_data.py"],
+      "artifact_globs": ["data/*.csv", "experiments/*/config.json", "experiments/*/test_metrics.json", "experiments/*/*.png"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-r", "requirements.txt"], "requires_network": true}],
+      "commands": [
+        {
+          "name": "generate synthetic intraday data",
+          "level": "quick",
+          "cmd": ["python", "scripts/download_data.py", "--synthetic"],
+          "expected_globs": ["data/*.csv"],
+          "timeout_seconds": 180
+        },
+        {
+          "name": "train DQN sandbox",
+          "level": "full",
+          "cmd": ["python", "-m", "rl_trading.training.train"],
+          "expected_globs": ["experiments/*/best_model.zip", "experiments/*/training_log.csv"],
+          "timeout_seconds": 3600
+        }
+      ]
+    },
+    {
+      "id": "i",
+      "name": "Risk Score API",
+      "path": "i - Risk Score API (Model as service)/risk-score-api",
+      "python": ">=3.11",
+      "dependency_files": ["requirements.txt"],
+      "expected_paths": ["README.md", "requirements.txt", "app/main.py", "app/templates/index.html", "app/static/style.css", "models/model.joblib", "models/model_meta.json", "metrics/metrics.json", "tests"],
+      "artifact_globs": ["data/*.csv", "models/*.joblib", "models/*.json", "metrics/*.json"],
+      "json_globs": ["models/*.json", "metrics/*.json"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-r", "requirements.txt"], "requires_network": true}],
+      "commands": [
+        {
+          "name": "run API tests",
+          "level": "quick",
+          "cmd": ["python", "-m", "pytest", "tests"],
+          "expected_globs": ["models/model.joblib", "metrics/metrics.json"],
+          "timeout_seconds": 300
+        }
+      ]
+    },
+    {
+      "id": "j",
+      "name": "Mini Auto-ML Experiment Runner",
+      "path": "j - Mini Auto-ML Experiment Runner for Tabular Data/auto_experiment_runner",
+      "python": ">=3.11",
+      "dependency_files": ["pyproject.toml", "setup.py"],
+      "expected_paths": ["README.md", "pyproject.toml", "setup.py", "autotab", "configs/demo_classification.yaml", "configs/demo_regression.yaml", "examples/data", "tests"],
+      "artifact_globs": ["examples/data/*.csv", "outputs/*/leaderboard.json", "outputs/*/report.md"],
+      "json_globs": ["outputs/*/*.json"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-e", "."], "requires_network": true}],
+      "commands": [
+        {
+          "name": "run AutoML tests",
+          "level": "quick",
+          "cmd": ["python", "-m", "pytest"],
+          "expected_globs": ["outputs/*/leaderboard.json"],
+          "timeout_seconds": 300
+        },
+        {
+          "name": "run classification demo",
+          "level": "full",
+          "cmd": ["python", "-m", "autotab.cli", "--config", "configs/demo_classification.yaml"],
+          "expected_globs": ["outputs/*/leaderboard.json", "outputs/*/report.md"],
+          "timeout_seconds": 900
+        }
+      ]
+    },
+    {
+      "id": "k",
+      "name": "Backtest & Research Lab",
+      "path": "k - Backtest & Research Lab",
+      "python": ">=3.10",
+      "dependency_files": ["pyproject.toml", "requirements.txt"],
+      "expected_paths": ["README.md", "pyproject.toml", "requirements.txt", "src/backtest_lab", "configs", "tests"],
+      "artifact_globs": ["data/processed/*.csv", "artifacts/*/metrics.json", "artifacts/*/returns.csv", "artifacts/*/plots/*.png"],
+      "json_globs": ["artifacts/*/*.json"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-e", "."], "requires_network": true}],
+      "commands": [
+        {
+          "name": "run backtest test suite",
+          "level": "quick",
+          "cmd": ["python", "-m", "pytest", "-q", "-ra", "-W", "error::FutureWarning", "-W", "error::UserWarning", "-W", "error::DeprecationWarning"],
+          "expected_globs": ["tests/test_pipeline_e2e.py"],
+          "timeout_seconds": 600
+        },
+        {
+          "name": "run required experiments",
+          "level": "full",
+          "cmd": ["python", "scripts/run_required_experiments.py"],
+          "expected_globs": ["artifacts/*/metrics.json", "artifacts/*/returns.csv"],
+          "timeout_seconds": 1800
+        }
+      ]
+    }
+  ]
+}
