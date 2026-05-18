@@ -1,0 +1,4 @@
+# Generated portfolio artifacts should not drive GitHub language stats.
+"h - Mini-RL Trading Sandbox (RL Fundamentals)/rl_trading_sandbox/experiments/**" linguist-generated
+"j - Mini Auto-ML Experiment Runner for Tabular Data/auto_experiment_runner/outputs/**" linguist-generated
+"k - Backtest & Research Lab/artifacts/**" linguist-generated
