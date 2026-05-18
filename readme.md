@@ -1,5 +1,7 @@
 # Machine Learning Projects
 
+[![Python >= 3.11](https://img.shields.io/badge/Python-%3E%3D3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
+
 A compact portfolio of independent ML projects across market data, security analytics, NLP, reinforcement learning, API serving, AutoML, and backtesting.
 
 Each project is self-contained. Dependencies, data assumptions, run commands, and generated artifacts live inside the project folder. The root-level verifier gives a consistent way to check that each folder is still present, readable, and reproducible.
