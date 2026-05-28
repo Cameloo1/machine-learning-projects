@@ -2,7 +2,7 @@
 
 [![Python >= 3.11](https://img.shields.io/badge/Python-%3E%3D3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
 
-A compact portfolio of independent ML projects across market data, security analytics, NLP, reinforcement learning, API serving, AutoML, and backtesting.
+A compact portfolio of independent ML projects across market data, security analytics, NLP, reinforcement learning, API serving, AutoML, backtesting, and learned-index sorting.
 
 Each project is self-contained. Dependencies, data assumptions, run commands, and generated artifacts live inside the project folder. The root-level verifier gives a consistent way to check that each folder is still present, readable, and reproducible.
 
@@ -21,13 +21,14 @@ Each project is self-contained. Dependencies, data assumptions, run commands, an
 | `i` | Risk Score API | FastAPI model-serving demo | pytest/TestClient |
 | `j` | Mini AutoML Runner | tabular experiment runner | pytest and demo configs |
 | `k` | Backtest & Research Lab | quant backtesting and validation harness | pytest and config runs |
+| `l` | Learned Bucket Sort Predictor | learned CDF bucket assignment for bucket sort | pytest and offline synthetic benchmarks |
 
 ## Repository Layout
 
 - `projects.json` - reproducibility contract for every project.
 - `scripts/verify_projects.py` - root verifier.
 - `docs/reproducibility.md` - verification workflow and flags.
-- `a - .../` through `k - .../` - independent project folders.
+- `a - .../` through `l - .../` - independent project folders.
 
 Generated verification reports are written to `reports/reproducibility/` and ignored by Git. Disposable verifier workspaces and virtual environments are written to `.verify/` and ignored by Git.
 

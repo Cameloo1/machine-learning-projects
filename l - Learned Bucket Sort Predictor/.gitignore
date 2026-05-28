@@ -1,0 +1,31 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test and tooling caches
+.pytest_cache/
+.pytest-tmp/
+.test-runs/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local run logs and temporary outputs
+*.log
+*.tmp
+*.temp
+
+# Generated benchmark payloads stay local until intentionally promoted.
+artifacts/*
+!artifacts/.gitkeep
+
+# Generated synthetic datasets stay local until intentionally promoted.
+datasets/generated/*
+!datasets/generated/.gitkeep

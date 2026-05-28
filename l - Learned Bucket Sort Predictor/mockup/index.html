@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learned Bucket Sort — Demo</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface-2: #243044;
+      --border: #2d3a4f;
+      --text: #e8edf4;
+      --muted: #8b9cb3;
+      --accent: #3d9cf0;
+      --baseline: #e07a5f;
+      --learned: #81b29a;
+      --ok: #6bcb8a;
+      --warn: #f2cc8f;
+      --font: "Segoe UI", system-ui, sans-serif;
+      --mono: Consolas, monospace;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.75rem 1rem 2.5rem;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 40rem;
+    }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    section h2 {
+      font-size: 1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    section .hint {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.85rem;
+      align-items: end;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    select, button {
+      width: 100%;
+      font: inherit;
+      font-size: 0.9rem;
+    }
+
+    select {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.45rem 0.55rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .range-val {
+      font-size: 0.82rem;
+      color: var(--accent);
+      margin-top: 0.2rem;
+    }
+
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.55rem 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover { filter: brightness(1.08); }
+
+    .scenario-blurb {
+      margin-top: 0.75rem;
+      padding: 0.65rem 0.75rem;
+      background: var(--bg);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .chart-wrap {
+      position: relative;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.65rem 0.5rem;
+    }
+
+    .chart-wrap canvas {
+      display: block;
+      width: 100%;
+      cursor: crosshair;
+    }
+
+    .axis-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--muted);
+      padding: 0.15rem 0.35rem 0;
+    }
+
+    .y-label {
+      position: absolute;
+      left: 0.15rem;
+      top: 50%;
+      transform: rotate(-90deg) translateX(-50%);
+      transform-origin: left center;
+      font-size: 0.68rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .detail-box {
+      margin-top: 0.65rem;
+      padding: 0.65rem 0.75rem;
+      background: var(--surface-2);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      min-height: 3.2rem;
+    }
+
+    .detail-box strong { color: var(--text); }
+
+    .detail-box .idle { color: var(--muted); }
+
+    .verdict {
+      margin-top: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background: var(--bg);
+    }
+
+    .verdict.good { border-left: 3px solid var(--learned); }
+    .verdict.neutral { border-left: 3px solid var(--muted); }
+
+    .two-charts {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 700px) {
+      .two-charts { grid-template-columns: 1fr 1fr; }
+    }
+
+    .chart-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .chart-title .tag {
+      font-weight: 500;
+      font-size: 0.72rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+      margin-left: 0.35rem;
+    }
+
+    .tag.classic { background: rgba(224, 122, 95, 0.2); color: var(--baseline); }
+    .tag.smart { background: rgba(129, 178, 154, 0.2); color: var(--learned); }
+
+    .avg-line-legend {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    .avg-line-legend span {
+      display: inline-block;
+      width: 18px;
+      height: 0;
+      border-top: 2px dashed var(--warn);
+      vertical-align: middle;
+      margin-right: 0.25rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.45rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th { color: var(--muted); font-weight: 500; font-size: 0.8rem; }
+
+    .ok-line {
+      margin-top: 0.65rem;
+      font-size: 0.85rem;
+      color: var(--ok);
+    }
+
+    #tooltip {
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      background: #0a0e12;
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      max-width: 260px;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+      line-height: 1.4;
+    }
+
+    footer {
+      margin-top: 1.25rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .arch-intro {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      max-width: 44rem;
+    }
+
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 1rem 0;
+    }
+
+    .pipe-step {
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: 0.65rem;
+      align-items: start;
+      padding: 0.65rem 0;
+      border-left: 2px solid var(--border);
+      margin-left: 0.75rem;
+      padding-left: 1rem;
+    }
+
+    .pipe-step:last-child { border-left-color: transparent; }
+
+    .pipe-num {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: var(--bg);
+      width: 1.6rem;
+      height: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      margin-left: -1.85rem;
+    }
+
+    .pipe-step h3 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .pipe-step p {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .formula {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.6rem;
+      border-radius: 4px;
+      margin-top: 0.4rem;
+      color: #c5d4e8;
+      overflow-x: auto;
+    }
+
+    .compare-grid {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .compare-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .compare-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem;
+    }
+
+    .compare-card h3 {
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .compare-card.classic h3 { color: var(--baseline); }
+    .compare-card.learned h3 { color: var(--learned); }
+
+    .compare-card ul {
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding-left: 1.1rem;
+      margin-top: 0.35rem;
+    }
+
+    .compare-card li { margin-bottom: 0.25rem; }
+
+    .term {
+      color: var(--text);
+      border-bottom: 1px dotted var(--border);
+      cursor: help;
+    }
+
+    .takeaway {
+      margin-top: 1rem;
+      padding: 0.7rem 0.8rem;
+      background: var(--bg);
+      border-radius: 6px;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .takeaway strong { color: var(--text); }
+
+    .method-grid,
+    .evidence-grid {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 0.85rem;
+    }
+
+    @media (min-width: 760px) {
+      .method-grid { grid-template-columns: repeat(3, 1fr); }
+      .evidence-grid { grid-template-columns: 1fr; }
+    }
+
+    .method-card,
+    .evidence-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem;
+    }
+
+    .method-card h3,
+    .evidence-item h3 {
+      font-size: 0.85rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .method-card p,
+    .evidence-item p {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .method-card ul {
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding-left: 1.1rem;
+      margin-top: 0.35rem;
+    }
+
+    .method-card li { margin-bottom: 0.25rem; }
+
+    .method-card.baseline h3 { color: var(--baseline); }
+    .method-card.linear h3 { color: var(--accent); }
+    .method-card.mlp h3 { color: var(--learned); }
+
+    .evidence-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-top: 0.55rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .truth-note {
+      margin-top: 0.75rem;
+      padding: 0.65rem 0.75rem;
+      background: rgba(242, 204, 143, 0.08);
+      border-left: 3px solid var(--warn);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="tooltip"></div>
+
+  <div class="wrap">
+    <header>
+      <h1>Learned Bucket Sort</h1>
+      <p>
+        Bucket sort is fast when every bucket holds about the same number of items.
+        The usual rule places buckets at equal steps between the minimum and maximum value — that only works if the data is spread uniformly.
+        Here, a small regression model estimates the <strong>cumulative distribution (CDF)</strong> of the data and uses it as the bucket index — a learned-index approach.
+        The browser demo compares both strategies on the same synthetic sample; the evidence section below shows the real Python benchmark results. <strong>Hover the charts</strong> for per-bar detail.
+      </p>
+    </header>
+
+    <section id="architecture">
+      <h2>Architecture — ML to bucket assignment to sorted output</h2>
+      <p class="arch-intro">
+        Machine learning does not replace the sort. It only replaces the <em>bucketing function</em> — the step that decides which bucket each value enters.
+        Everything after that is standard bucket sort: sort inside each bucket, then concatenate in bucket order.
+      </p>
+
+      <div class="pipeline">
+        <div class="pipe-step">
+          <span class="pipe-num">1</span>
+          <div>
+            <h3>Generate or load values</h3>
+            <p>Synthetic scenarios mimic skewed real data (order sizes, latency, etc.). The Python benchmarks use the same arrays for baseline and learned paths.</p>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <span class="pipe-num">2</span>
+          <div>
+            <h3>Build CDF training pairs</h3>
+            <p>Sort a sample of size <em>n</em>. For each value <em>x</em>, record its <strong>normalized rank</strong> in [0, 1] — its position in the sorted list. That rank is the empirical CDF target: “what fraction of data lies at or below <em>x</em>?”</p>
+            <div class="formula">train_target(x) = rank(x) / (n − 1)</div>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <span class="pipe-num">3</span>
+          <div>
+            <h3>Fit a CDF model</h3>
+            <p>Fit <code>f(x) → [0, 1]</code>. The Python package includes a CPU <strong>linear_cdf</strong> model and an optional Torch <strong>mlp_cdf</strong> model for CPU or CUDA. Input: scalar value. Output: predicted rank.</p>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <span class="pipe-num">4</span>
+          <div>
+            <h3>Assign buckets via the learned index</h3>
+            <p>Map each value through <em>f</em>, scale to bucket count <em>B</em>, and clamp. A perfect CDF model sends mass uniformly across [0, 1], so buckets fill evenly — the precondition for near-linear bucket sort.</p>
+            <div class="formula">bucket(x) = clamp( floor( B × f(x) ), 0, B − 1 )</div>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <span class="pipe-num">5</span>
+          <div>
+            <h3>Intra-bucket sort and concatenate</h3>
+            <p>Insertion sort (or another stable sort) within each bucket, then append buckets 0 … B−1. Final order is identical to a full sort; only the partition changes.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-grid">
+        <div class="compare-card classic">
+          <h3>Baseline — analytic min–max index</h3>
+          <p>Assumes values are uniformly distributed between min and max.</p>
+          <div class="formula">bucket(x) = floor( B × (x − min) / (max − min) )</div>
+          <ul>
+            <li>No training step</li>
+            <li>Fast, but wrong index when data is skewed</li>
+            <li>Chart 2 often shows tall spikes (overloaded buckets)</li>
+          </ul>
+        </div>
+        <div class="compare-card learned">
+          <h3>Learned — CDF regressor as index</h3>
+          <p>Learns the actual quantile structure of the sample.</p>
+          <div class="formula">bucket(x) = floor( B × f(x) ), &nbsp; f ≈ empirical CDF</div>
+          <ul>
+            <li>One-time fit cost on a sample</li>
+            <li>Better bucket occupancy on non-uniform data</li>
+            <li>Lower sort cost when saved bucket work exceeds model overhead</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="takeaway">
+        <strong>Why this is “smart” architecture:</strong> The CDF is the statistically correct map from raw values to uniform quantiles.
+        Classical bucket sort hardcodes uniformity in value space; the learned path hardcodes uniformity in <em>rank</em> space.
+        Same sort algorithm downstream — a better index makes the existing algorithm work as designed.
+        This browser demo approximates step 3–4 with empirical quantiles; the shipped Python package uses trained <code>linear_cdf</code> and optional Torch <code>mlp_cdf</code> models.
+      </p>
+      <p class="truth-note">
+        Browser charts are illustrative. They do not run the Python models, train Torch, or load benchmark JSON. Real project claims come from the benchmark artifacts and plots below.
+      </p>
+    </section>
+
+    <section>
+      <h2>Interactive comparison</h2>
+      <div class="controls">
+        <div>
+          <label for="scenario">Synthetic scenario</label>
+          <select id="scenario"></select>
+        </div>
+        <div>
+          <label for="n">Sample size (n)</label>
+          <input type="range" id="n" min="5000" max="50000" step="5000" value="20000">
+          <div class="range-val" id="n-val">20,000</div>
+        </div>
+        <div>
+          <label for="buckets">Bucket count (B)</label>
+          <input type="range" id="buckets" min="40" max="200" step="20" value="100">
+          <div class="range-val" id="buckets-val">100</div>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button type="button" id="run">Run comparison</button>
+        </div>
+      </div>
+      <p class="scenario-blurb" id="scenario-blurb"></p>
+    </section>
+
+    <section>
+      <h2>Chart 1 — Input distribution (before bucketing)</h2>
+      <p class="hint">
+        Histogram of the raw sample. Skew or multiple peaks here mean the min–max index will misallocate buckets; the CDF model is trained to correct for exactly this shape.
+      </p>
+      <div class="chart-wrap">
+        <div class="y-label">count</div>
+        <canvas id="chart-raw" width="700" height="220"></canvas>
+        <div class="axis-labels">
+          <span id="raw-x-min">low</span>
+          <span style="text-align:center;flex:1">← value range →</span>
+          <span id="raw-x-max">high</span>
+        </div>
+      </div>
+      <div class="detail-box" id="detail-raw">
+        <span class="idle">Hover a bar for the value interval and item count.</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Chart 2 — Bucket occupancy (after assignment)</h2>
+      <p class="hint">
+        Same <em>n</em>, same <em>B</em> — only the bucketing function differs. Height = items per bucket before intra-bucket sort.
+        Balanced occupancy (bars near the dashed line) is what bucket sort needs for O(n) behavior; spikes mean O(k²) work inside overloaded buckets.
+      </p>
+      <div class="two-charts">
+        <div class="chart-wrap">
+          <div class="chart-title">Min–max index <span class="tag classic">baseline</span></div>
+          <canvas id="chart-baseline" width="420" height="200" data-chart="baseline"></canvas>
+          <div class="axis-labels">
+            <span>bucket 0</span>
+            <span>bucket index →</span>
+            <span id="base-x-max">bucket B−1</span>
+          </div>
+          <div class="avg-line-legend"><span></span> target n / B (uniform occupancy)</div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">CDF index <span class="tag smart">learned</span></div>
+          <canvas id="chart-learned" width="420" height="200" data-chart="learned"></canvas>
+          <div class="axis-labels">
+            <span>bucket 0</span>
+            <span>bucket index →</span>
+            <span id="learn-x-max">bucket B−1</span>
+          </div>
+          <div class="avg-line-legend"><span></span> target n / B (uniform occupancy)</div>
+        </div>
+      </div>
+      <div class="detail-box" id="detail-bins">
+        <span class="idle">Hover a bucket on either chart for occupancy, value range, and load vs target n/B.</span>
+      </div>
+      <div class="verdict good" id="verdict"></div>
+    </section>
+
+    <section>
+      <h2>Metrics</h2>
+      <p class="hint" style="margin-bottom:0.5rem">Primary: bucket balance. Secondary: estimated comparison cost inside buckets (proxy for sort time).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Baseline</th>
+            <th>Learned (CDF)</th>
+          </tr>
+        </thead>
+        <tbody id="metrics-body"></tbody>
+      </table>
+      <p class="ok-line" id="correctness"></p>
+    </section>
+
+    <section id="methods">
+      <h2>Current Python methods</h2>
+      <p class="hint">All methods still return a correctly sorted result. The difference is how they choose buckets before sorting inside each bucket.</p>
+      <div class="method-grid">
+        <div class="method-card baseline">
+          <h3>analytic_baseline</h3>
+          <p>Uses min-max scaling directly as the bucket index.</p>
+          <ul>
+            <li>No model cost</li>
+            <li>Good on uniform data</li>
+            <li>Overloads buckets on skewed data</li>
+          </ul>
+        </div>
+        <div class="method-card linear">
+          <h3>linear_cdf</h3>
+          <p>Fits a CPU linear model to empirical CDF ranks.</p>
+          <ul>
+            <li>Current practical runtime win</li>
+            <li>Cheap prediction path</li>
+            <li>Weak on strongly nonlinear shapes</li>
+          </ul>
+        </div>
+        <div class="method-card mlp">
+          <h3>mlp_cdf</h3>
+          <p>Fits an optional Torch MLP CDF model on CPU or CUDA.</p>
+          <ul>
+            <li>Strongest bucket-quality win</li>
+            <li>Prediction cost is still high</li>
+            <li>Speed win is not proven yet</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="evidence">
+      <h2>Evidence from the Python benchmarks</h2>
+      <p class="hint">These plots are generated from fresh benchmark JSON artifacts by <code>scripts/run_part5_evidence.py</code>.</p>
+      <div class="evidence-grid">
+        <div class="evidence-item">
+          <h3>Scale closure</h3>
+          <p>Median total runtime favors <code>linear_cdf</code> more clearly as <em>n</em> grows.</p>
+          <img class="evidence-img" src="../assets/part5-scale-closure-total-ms.png" alt="Scale closure total runtime plot">
+        </div>
+        <div class="evidence-item">
+          <h3>Bucket quality</h3>
+          <p><code>mlp_cdf</code> usually reduces the largest bucket on hard shapes, which is the strongest bucket-quality result.</p>
+          <img class="evidence-img" src="../assets/part5-bucket-quality.png" alt="Bucket quality by method plot">
+        </div>
+        <div class="evidence-item">
+          <h3>Amortized runtime</h3>
+          <p><code>linear_cdf</code> has the fastest reused sort path; <code>mlp_cdf</code> is slower because prediction time dominates.</p>
+          <img class="evidence-img" src="../assets/part5-amortized-runtime-breakdown.png" alt="Amortized runtime breakdown plot">
+        </div>
+      </div>
+    </section>
+
+    <footer>Browser demo uses empirical CDF approximation · Python package benchmarks linear_cdf and optional Torch mlp_cdf · Offline synthetic data only.</footer>
+  </div>
+
+  <script>
+    function randn() {
+      let u = 0, v = 0;
+      while (!u) u = Math.random();
+      while (!v) v = Math.random();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    }
+
+    function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+
+    const SCENARIOS = [
+      {
+        id: "retail_orders",
+        name: "Online order sizes ($)",
+        unit: "$",
+        blurb: "Most orders are small; a few are very large — like a typical web shop.",
+        generate(n) {
+          const out = new Float64Array(n);
+          for (let i = 0; i < n; i++) {
+            const z = Math.exp(3.2 + 0.65 * randn());
+            out[i] = clamp(z * 12 + 4, 5, 2500);
+          }
+          return out;
+        }
+      },
+      {
+        id: "api_latency",
+        name: "Website response times (ms)",
+        unit: "ms",
+        blurb: "Most requests are fast; some spike when the server struggles.",
+        generate(n) {
+          const out = new Float64Array(n);
+          for (let i = 0; i < n; i++) {
+            const g = (-Math.log(Math.random()) + -Math.log(Math.random())) * 18;
+            const spike = Math.random() < 0.02 ? 200 + Math.random() * 800 : 0;
+            out[i] = clamp(g + spike + 5, 5, 1200);
+          }
+          return out;
+        }
+      },
+      {
+        id: "session_duration",
+        name: "How long people stay on a site (seconds)",
+        unit: "sec",
+        blurb: "Many people leave quickly; others stay much longer — two different groups.",
+        generate(n) {
+          const out = new Float64Array(n);
+          for (let i = 0; i < n; i++) {
+            out[i] = Math.random() < 0.72
+              ? clamp(-Math.log(Math.random()) * 8 + 1, 0.5, 120)
+              : clamp(Math.exp(2.8 + 0.5 * randn()) * 4, 1, 3600);
+          }
+          return out;
+        }
+      },
+      {
+        id: "sensor_qc",
+        name: "Factory temperature readings (°C)",
+        unit: "°C",
+        blurb: "Readings cluster around a few target temperatures on the production line.",
+        generate(n) {
+          const centers = [18.5, 22.0, 26.5];
+          const out = new Float64Array(n);
+          for (let i = 0; i < n; i++) {
+            const c = centers[Math.floor(Math.random() * 3)];
+            out[i] = c + randn() * 0.35;
+          }
+          return out;
+        }
+      },
+      {
+        id: "uniform_control",
+        name: "Evenly spread numbers (control test)",
+        unit: "",
+        blurb: "Every value is equally likely — both methods should look about the same here.",
+        generate(n) {
+          const out = new Float64Array(n);
+          for (let i = 0; i < n; i++) out[i] = Math.random() * 1000;
+          return out;
+        }
+      }
+    ];
+
+    const chartState = { raw: null, baseline: null, learned: null };
+    const tooltip = document.getElementById("tooltip");
+
+    function bucketBaseline(data, numBuckets) {
+      let min = Infinity, max = -Infinity;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i] < min) min = data[i];
+        if (data[i] > max) max = data[i];
+      }
+      const span = max - min || 1;
+      const counts = new Array(numBuckets).fill(0);
+      for (let i = 0; i < data.length; i++) {
+        const t = (data[i] - min) / span;
+        counts[clamp(Math.floor(numBuckets * t), 0, numBuckets - 1)]++;
+      }
+      const ranges = [];
+      for (let b = 0; b < numBuckets; b++) {
+        ranges.push({
+          lo: min + (b / numBuckets) * span,
+          hi: min + ((b + 1) / numBuckets) * span
+        });
+      }
+      return { counts, ranges, min, max };
+    }
+
+    function bucketLearned(data, numBuckets) {
+      const sorted = Array.from(data).sort((a, b) => a - b);
+      const n = sorted.length;
+      const counts = new Array(numBuckets).fill(0);
+      const bucketValues = Array.from({ length: numBuckets }, () => []);
+      for (let i = 0; i < data.length; i++) {
+        const x = data[i];
+        let lo = 0, hi = n - 1;
+        while (lo < hi) {
+          const mid = (lo + hi) >> 1;
+          if (sorted[mid] < x) lo = mid + 1;
+          else hi = mid;
+        }
+        const rank = lo / (n - 1 || 1);
+        const b = clamp(Math.floor(numBuckets * rank), 0, numBuckets - 1);
+        counts[b]++;
+        bucketValues[b].push(x);
+      }
+      const ranges = counts.map((_, b) => {
+        const vals = bucketValues[b];
+        if (!vals.length) return { lo: 0, hi: 0 };
+        vals.sort((a, c) => a - c);
+        return { lo: vals[0], hi: vals[vals.length - 1] };
+      });
+      return { counts, ranges };
+    }
+
+    function variance(counts) {
+      const m = counts.reduce((a, b) => a + b, 0) / counts.length;
+      return counts.reduce((s, c) => s + (c - m) ** 2, 0) / counts.length;
+    }
+
+    function estimateComparisons(counts) {
+      return counts.reduce((s, c) => s + (c * (c - 1)) / 2, 0);
+    }
+
+    function learnedSort(data, numBuckets) {
+      const sorted = Array.from(data).sort((a, b) => a - b);
+      const n = sorted.length;
+      const buckets = Array.from({ length: numBuckets }, () => []);
+      for (let i = 0; i < data.length; i++) {
+        const x = data[i];
+        let lo = 0, hi = n - 1;
+        while (lo < hi) {
+          const mid = (lo + hi) >> 1;
+          if (sorted[mid] < x) lo = mid + 1;
+          else hi = mid;
+        }
+        const rank = lo / (n - 1 || 1);
+        buckets[clamp(Math.floor(numBuckets * rank), 0, numBuckets - 1)].push(x);
+      }
+      const out = [];
+      for (const b of buckets) {
+        const a = b.slice().sort((x, y) => x - y);
+        out.push(...a);
+      }
+      return out;
+    }
+
+    function fmtNum(x, unit) {
+      const s = x >= 100 ? x.toFixed(0) : x.toFixed(1);
+      return unit ? `${s} ${unit}` : s;
+    }
+
+    function fmtCount(n) {
+      return n.toLocaleString();
+    }
+
+    function buildBarChart(canvas, config) {
+      const { bars, color, idealLine, yLabel } = config;
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width, h = canvas.height;
+      const padL = 44, padR = 12, padT = 14, padB = 28;
+      const plotW = w - padL - padR;
+      const plotH = h - padT - padB;
+      const maxC = Math.max(...bars.map(b => b.count), idealLine || 1, 1);
+      const barW = plotW / bars.length;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "#1a2332";
+      ctx.fillRect(0, 0, w, h);
+
+      // grid + y ticks
+      ctx.strokeStyle = "#2d3a4f";
+      ctx.fillStyle = "#8b9cb3";
+      ctx.font = "10px sans-serif";
+      for (let t = 0; t <= 4; t++) {
+        const y = padT + plotH - (plotH * t) / 4;
+        const val = Math.round((maxC * t) / 4);
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(w - padR, y);
+        ctx.stroke();
+        ctx.fillText(String(val), 4, y + 3);
+      }
+
+      if (idealLine) {
+        const yIdeal = padT + plotH - (plotH * idealLine) / maxC;
+        ctx.strokeStyle = "#f2cc8f";
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(padL, yIdeal);
+        ctx.lineTo(w - padR, yIdeal);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      const hitBars = [];
+      for (let i = 0; i < bars.length; i++) {
+        const count = bars[i].count;
+        const barH = (plotH * count) / maxC;
+        const x = padL + i * barW;
+        const y = padT + plotH - barH;
+        const overload = idealLine && count > idealLine * 1.75;
+        ctx.fillStyle = overload ? "#c45c4a" : color;
+        ctx.fillRect(x + 0.5, y, Math.max(1, barW - 1), barH);
+        hitBars.push({
+          index: i,
+          count,
+          x, y,
+          w: barW,
+          h: barH,
+          lo: bars[i].lo,
+          hi: bars[i].hi,
+          overload,
+          pct: bars[i].pct
+        });
+      }
+
+      ctx.strokeStyle = "#4a5a72";
+      ctx.beginPath();
+      ctx.moveTo(padL, padT + plotH);
+      ctx.lineTo(w - padR, padT + plotH);
+      ctx.stroke();
+
+      ctx.fillStyle = "#8b9cb3";
+      ctx.fillText(yLabel || "count", padL, padT - 2);
+
+      return { hitBars, padL, padR, padT, padB, maxC, idealLine };
+    }
+
+    function buildRawHistogram(canvas, data, unit, bins = 40) {
+      let min = Infinity, max = -Infinity;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i] < min) min = data[i];
+        if (data[i] > max) max = data[i];
+      }
+      const span = max - min || 1;
+      const counts = new Array(bins).fill(0);
+      for (let i = 0; i < data.length; i++) {
+        counts[clamp(Math.floor(bins * (data[i] - min) / span), 0, bins - 1)]++;
+      }
+      const bars = counts.map((count, i) => ({
+        count,
+        lo: min + (i / bins) * span,
+        hi: min + ((i + 1) / bins) * span,
+        pct: (count / data.length) * 100
+      }));
+      const meta = buildBarChart(canvas, {
+        bars,
+        color: "#3d9cf0",
+        yLabel: "count"
+      });
+      return { ...meta, min, max, unit, total: data.length };
+    }
+
+    function buildOccupancy(canvas, bucketResult, n, color) {
+      const ideal = n / bucketResult.counts.length;
+      const bars = bucketResult.counts.map((count, i) => ({
+        count,
+        lo: bucketResult.ranges[i].lo,
+        hi: bucketResult.ranges[i].hi,
+        pct: (count / n) * 100
+      }));
+      return buildBarChart(canvas, {
+        bars,
+        color,
+        idealLine: ideal,
+        yLabel: "items in bin"
+      });
+    }
+
+    function showTooltip(e, html) {
+      tooltip.innerHTML = html;
+      tooltip.style.display = "block";
+      tooltip.style.left = (e.clientX + 14) + "px";
+      tooltip.style.top = (e.clientY + 14) + "px";
+    }
+
+    function hideTooltip() {
+      tooltip.style.display = "none";
+    }
+
+    function attachHover(canvas, stateKey, onHover, onLeave) {
+      canvas.onmousemove = (e) => {
+        const st = chartState[stateKey];
+        if (!st) return;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const x = (e.clientX - rect.left) * scaleX;
+        const bar = st.hitBars.find(b => x >= b.x && x < b.x + b.w);
+        if (bar) {
+          canvas.style.cursor = "pointer";
+          onHover(e, bar, st);
+        } else {
+          canvas.style.cursor = "crosshair";
+          hideTooltip();
+          onLeave?.();
+        }
+      };
+      canvas.onmouseleave = () => {
+        hideTooltip();
+        onLeave?.();
+      };
+    }
+
+    function run() {
+      const scenario = SCENARIOS.find(s => s.id === document.getElementById("scenario").value);
+      const n = Number(document.getElementById("n").value);
+      const numBuckets = Number(document.getElementById("buckets").value);
+      const unit = scenario.unit;
+
+      const data = scenario.generate(n);
+      const base = bucketBaseline(data, numBuckets);
+      const learned = bucketLearned(data, numBuckets);
+
+      const sortedRef = Array.from(data).sort((a, b) => a - b);
+      const out = learnedSort(data, numBuckets);
+      const ok = out.every((v, i) => Math.abs(v - sortedRef[i]) < 1e-9);
+
+      chartState.unit = unit;
+      chartState.ideal = n / numBuckets;
+
+      document.getElementById("scenario-blurb").textContent = scenario.blurb;
+      document.getElementById("base-x-max").textContent = `bin ${numBuckets}`;
+      document.getElementById("learn-x-max").textContent = `bin ${numBuckets}`;
+
+      const rawCanvas = document.getElementById("chart-raw");
+      chartState.raw = buildRawHistogram(rawCanvas, data, unit);
+      document.getElementById("raw-x-min").textContent = fmtNum(chartState.raw.min, unit);
+      document.getElementById("raw-x-max").textContent = fmtNum(chartState.raw.max, unit);
+
+      const baseCanvas = document.getElementById("chart-baseline");
+      const learnCanvas = document.getElementById("chart-learned");
+      chartState.baseline = buildOccupancy(baseCanvas, base, n, "#e07a5f");
+      chartState.learned = buildOccupancy(learnCanvas, learned, n, "#81b29a");
+
+      const ideal = n / numBuckets;
+      const baseVar = variance(base.counts);
+      const learnVar = variance(learned.counts);
+      const baseCmp = estimateComparisons(base.counts);
+      const learnCmp = estimateComparisons(learned.counts);
+      const maxBase = Math.max(...base.counts);
+      const maxLearn = Math.max(...learned.counts);
+
+      const improve = learnVar < baseVar * 0.92;
+      const tie = Math.abs(learnVar - baseVar) / (baseVar || 1) < 0.1;
+
+      const verdict = document.getElementById("verdict");
+      verdict.className = "verdict " + (improve ? "good" : "neutral");
+      if (tie) {
+        verdict.textContent =
+          "Uniform control: occupancy profiles match — the CDF index has little to improve when min–max scaling is already appropriate. Try a skewed scenario (e.g. order sizes).";
+      } else if (improve) {
+        verdict.textContent =
+          `Learned index reduces load imbalance. Peak bucket occupancy: baseline ${fmtCount(maxBase)} vs learned ${fmtCount(maxLearn)} (target ≈ ${fmtCount(Math.round(ideal))}). Flatter occupancy → fewer Θ(k²) intra-bucket comparisons.`;
+      } else {
+        verdict.textContent =
+          "Gap is modest on this draw — increase n or pick a heavier-tailed scenario. Hover red bars on the baseline chart (occupancy > 1.75× n/B).";
+      }
+
+      document.getElementById("metrics-body").innerHTML = `
+        <tr>
+          <td>Bucket occupancy variance <span style="color:var(--muted)">↓ better balance</span></td>
+          <td>${baseVar.toFixed(0)}</td>
+          <td>${learnVar.toFixed(0)}</td>
+        </tr>
+        <tr>
+          <td>Max bucket size (worst-case bin)</td>
+          <td>${fmtCount(maxBase)}</td>
+          <td>${fmtCount(maxLearn)}</td>
+        </tr>
+        <tr>
+          <td>Est. intra-bucket comparisons <span style="color:var(--muted)">Σ k(k−1)/2</span></td>
+          <td>${fmtCount(Math.round(baseCmp))}</td>
+          <td>${fmtCount(Math.round(learnCmp))}</td>
+        </tr>
+        <tr>
+          <td>Uniform target (n / B)</td>
+          <td colspan="2">${fmtCount(Math.round(ideal))} items per bucket</td>
+        </tr>
+      `;
+
+      document.getElementById("correctness").textContent = ok
+        ? "✓ Output order matches reference sort — bucketing is partition-only; correctness is preserved."
+        : "✗ Sort order mismatch on this run — click Run again.";
+
+      updateRawDetail(null, unit);
+      updateBinDetail(null, null, unit, ideal);
+    }
+
+    function updateRawDetail(bar, unit) {
+      const el = document.getElementById("detail-raw");
+      if (!bar) {
+        el.innerHTML = '<span class="idle">Hover a bar for the value interval and item count.</span>';
+        return;
+      }
+      el.innerHTML = `
+        <strong>Histogram bin:</strong> [${fmtNum(bar.lo, unit)}, ${fmtNum(bar.hi, unit)}] ·
+        <strong>${fmtCount(bar.count)}</strong> samples (${bar.pct.toFixed(1)}% of n).
+      `;
+    }
+
+    function updateBinDetail(bar, which, unit, ideal) {
+      const el = document.getElementById("detail-bins");
+      if (!bar) {
+        el.innerHTML = '<span class="idle">Hover a bucket on either chart for occupancy, value range, and load vs target n/B.</span>';
+        return;
+      }
+      const label = which === "baseline" ? "Baseline (min–max)" : "Learned (CDF index)";
+      const vsIdeal = bar.count / ideal;
+      let load;
+      if (vsIdeal > 1.75) load = "<strong>Overloaded</strong> — occupancy well above n/B; drives intra-bucket sort cost.";
+      else if (vsIdeal < 0.6) load = "<strong>Underfilled</strong> — capacity wasted; often paired with overloaded buckets elsewhere.";
+      else load = "<strong>Near target</strong> — close to uniform occupancy.";
+
+      el.innerHTML = `
+        <strong>${label} · bucket ${bar.index}</strong><br>
+        Occupancy: <strong>${fmtCount(bar.count)}</strong> (${bar.pct.toFixed(1)}% of n).
+        Value span ≈ ${fmtNum(bar.lo, unit)} – ${fmtNum(bar.hi, unit)}.<br>
+        Target n/B = ${fmtCount(Math.round(ideal))}. ${load}
+      `;
+    }
+
+    function init() {
+      const sel = document.getElementById("scenario");
+      SCENARIOS.forEach(s => {
+        const o = document.createElement("option");
+        o.value = s.id;
+        o.textContent = s.name;
+        sel.appendChild(o);
+      });
+
+      document.getElementById("n").addEventListener("input", e => {
+        document.getElementById("n-val").textContent = Number(e.target.value).toLocaleString();
+      });
+      document.getElementById("buckets").addEventListener("input", e => {
+        document.getElementById("buckets-val").textContent = e.target.value;
+      });
+      document.getElementById("run").addEventListener("click", run);
+      document.getElementById("scenario").addEventListener("change", run);
+
+      attachHover(document.getElementById("chart-raw"), "raw", (e, bar, st) => {
+        showTooltip(e, `<strong>${fmtNum(bar.lo, st.unit)} – ${fmtNum(bar.hi, st.unit)}</strong><br>${fmtCount(bar.count)} values (${bar.pct.toFixed(1)}%)`);
+        updateRawDetail(bar, st.unit);
+      }, () => updateRawDetail(null));
+
+      attachHover(document.getElementById("chart-baseline"), "baseline", (e, bar) => {
+        showTooltip(e, `<strong>Bucket ${bar.index}</strong> (baseline)<br>${fmtCount(bar.count)} items${bar.overload ? "<br><span style='color:#e07a5f'>Overloaded</span>" : ""}`);
+        updateBinDetail(bar, "baseline", chartState.unit, chartState.ideal);
+      }, () => updateBinDetail(null));
+
+      attachHover(document.getElementById("chart-learned"), "learned", (e, bar) => {
+        showTooltip(e, `<strong>Bucket ${bar.index}</strong> (learned)<br>${fmtCount(bar.count)} items${bar.overload ? "<br><span style='color:#e07a5f'>Overloaded</span>" : ""}`);
+        updateBinDetail(bar, "learned", chartState.unit, chartState.ideal);
+      }, () => updateBinDetail(null));
+
+      run();
+    }
+
+    init();
+  </script>
+</body>
+</html>

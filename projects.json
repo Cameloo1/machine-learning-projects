@@ -265,6 +265,30 @@
           "timeout_seconds": 1800
         }
       ]
+    },
+    {
+      "id": "l",
+      "name": "Learned Bucket Sort Predictor",
+      "path": "l - Learned Bucket Sort Predictor",
+      "python": ">=3.11",
+      "dependency_files": ["requirements.txt"],
+      "expected_paths": ["README.md", "requirements.txt", "learned_bucket_sort", "scripts", "tests", "docs/ml-project-walkthrough.md", "mockup/index.html"],
+      "artifact_globs": ["assets/part5-scale-closure-total-ms.png", "assets/part5-bucket-quality.png", "assets/part5-amortized-runtime-breakdown.png"],
+      "install": [{"cmd": ["python", "-m", "pip", "install", "-r", "requirements.txt"], "requires_network": true}],
+      "commands": [
+        {
+          "name": "run learned bucket sort tests",
+          "level": "quick",
+          "cmd": ["python", "-m", "pytest", "tests/", "-q"],
+          "timeout_seconds": 600
+        },
+        {
+          "name": "run linear benchmark smoke test",
+          "level": "full",
+          "cmd": ["python", "-m", "learned_bucket_sort.benchmark", "--dist", "lognormal", "--n", "5000", "--buckets", "50", "--seed", "11", "--method", "linear", "--no-color"],
+          "timeout_seconds": 300
+        }
+      ]
     }
   ]
 }
